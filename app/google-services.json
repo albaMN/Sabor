@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "913253882540",
+    "firebase_url": "https://sabor-dima.firebaseio.com",
+    "project_id": "sabor-dima",
+    "storage_bucket": "sabor-dima.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:913253882540:android:16fc1155ed829cf4",
+        "android_client_info": {
+          "package_name": "dima.sabor"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "913253882540-g3cat2unkescvnvdd8oe46kapqp4thvi.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBMHzegGxYQ_H9U5BaKoXniA7OyRP_NlGA"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
