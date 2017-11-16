@@ -3,12 +3,13 @@
     package="dima.sabor">
 
     <application
+        android:name=".dependencyinjection.App"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".login.SignInActivityImpl">
+        <activity android:name=".splash.SplashActivityImpl">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -16,7 +17,11 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".profile.ProfileActivity"
+        <activity android:name=".login.SignInActivityImpl">
+
+        </activity>
+
+        <activity android:name=".profile.ProfileActivityImpl"
             android:windowSoftInputMode="adjustPan"/>
 
     </application>

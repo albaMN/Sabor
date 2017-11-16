@@ -39,6 +39,7 @@
                     android:layout_height="30dp"
                     android:background="@drawable/ic_tool2"
                     android:layout_gravity="center"
+                    android:id="@+id/options"
                     />
 
             </LinearLayout>

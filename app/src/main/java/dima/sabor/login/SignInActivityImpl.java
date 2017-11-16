@@ -2,28 +2,38 @@ package dima.sabor.login;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-
-import com.afollestad.materialdialogs.MaterialDialog;
+import android.widget.Toast;
 
 import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import dima.sabor.R;
-import dima.sabor.profile.ProfileActivity;
+import dima.sabor.base.BaseActivityImpl;
+import dima.sabor.dependencyinjection.App;
+import dima.sabor.dependencyinjection.activity.ActivityModule;
+import dima.sabor.dependencyinjection.view.ViewModule;
+import dima.sabor.model.User;
+import dima.sabor.profile.ProfileActivityImpl;
 
-public class SignInActivityImpl extends AppCompatActivity {
+public class SignInActivityImpl extends BaseActivityImpl {
+
     @Inject
     SignInPresenter presenter;
     SignInFragImpl loginFrag;
     SignUpFragImpl registerFrag;
 
-    protected MaterialDialog progressDialog;
+    User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        ((App) getApplication())
+                .getComponent()
+                .plus(new ActivityModule(this),
+                        new ViewModule(this))
+                .inject(this);
 
         ButterKnife.bind(this);
         loginFrag = new SignInFragImpl();
@@ -45,79 +55,34 @@ public class SignInActivityImpl extends AppCompatActivity {
                 .commit();
     }
 
-   /* public void goToVerificationView(String usuari) {
-        final Integer code = (int) (Math.random() * 100000);
-        String output = String.format("%05d", code);
-
-        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        View dialogView = LayoutInflater.from(this).inflate(R.layout.pop_verification, null);
-        builder.setView(dialogView);
-
-        final EditText codeEditText = (EditText) dialogView.findViewById(R.id.verification_code);
-
-        builder.setPositiveButton("Enviar", null);
-
-        final AlertDialog mDialog = builder.create();
-
-        mDialog.setOnShowListener(new DialogInterface.OnShowListener() {
-
-            @Override
-            public void onShow(DialogInterface dialog) {
-                Button b = mDialog.getButton(AlertDialog.BUTTON_POSITIVE);
-                b.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        String code1 = codeEditText.getText().toString();
-                        if (code.toString().equals(code1) || code1.equals("1234567")) {
-                            mDialog.dismiss();
-                            startActivity(new Intent(SignInActivity.this, ProfileActivity.class));
-                        } else {
-                            codeEditText.setText("");
-                            Toast.makeText(SignInActivity.this, "Wrong Code", Toast.LENGTH_LONG).show();
-                        }
-                    }
-                });
-
-            }
-        });
-
-        mDialog.show();
-    }*/
-
     public void onLoginPressed(String email, String password) {
         presenter.login(email, password);
     }
 
     public void onRegisterPressed(String email, String password, String username) {
-        presenter.register(email, password, username);
+        user = new User("", username, email, "", "", "");
+        presenter.register(email, password);
     }
 
-    /*@Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        openLoginFragment();
-        return true;
-    }*/
+    public void showExistUsername(User user, String username) {
+        Toast.makeText(this, "This username already exists." + username, Toast.LENGTH_LONG).show();
+    }
 
-/*
-    @Override
-    public void onRegisterRetrieved(Boolean returnParam) {
-        SignUpFragImpl registerFrag = (SignUpFragImpl)
-                getSupportFragmentManager().findFragmentById(R.id.fragment_view);
-        registerFrag.onRegisterRetrieved(returnParam);
-    }*/
-
-    public void showProgress(String message) {
-        if(progressDialog == null || !progressDialog.isShowing()) {
-            MaterialDialog.Builder builder = new MaterialDialog.Builder(this);
-            builder.content(message);
-            builder.progress(true, 0);
-            progressDialog = builder.build();
-
-            progressDialog.show();
-        }
+    public void registerSuccess() {
+        presenter.createUser(user);
     }
 
     public void changeActivity(){
-        startActivity(new Intent(SignInActivityImpl.this, ProfileActivity.class));
+        startActivity(new Intent(SignInActivityImpl.this, ProfileActivityImpl.class));
+        finish();
     }
+
+    public void showLoginFail() {
+        Toast.makeText(this, "Login Failed", Toast.LENGTH_LONG).show();
+    }
+
+   /* public void showLoginSuccess(User user) {
+        MainActivity.startWithUser(this, user);
+    }*/
+
 }
