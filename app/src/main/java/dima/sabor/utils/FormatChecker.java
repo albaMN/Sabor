@@ -17,4 +17,9 @@ public class FormatChecker {
     public final static void CheckPassword(String target) throws Exception {
         if(target.length()<6 || target.length()>20) throw new Exception("Password between 6 and 20 characters");
     }
+
+    public final static void CheckPasswordChange(String target,String target2) throws Exception {
+        if(!target.equals(target2)) throw new Exception("The passwords are different");
+    }
+
 }

@@ -7,7 +7,9 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 import dima.sabor.data.FirebaseInterface;
+import dima.sabor.data.InternalStorageInterface;
 import dima.sabor.data.impl.FirebaseDataSource;
+import dima.sabor.data.impl.InternalStorageDataSource;
 import dima.sabor.dependencyinjection.App;
 import dima.sabor.dependencyinjection.annotation.qualifier.ForApp;
 
@@ -32,6 +34,12 @@ public class ApplicationModule {
     @Provides
     @Singleton
     public FirebaseInterface providesFirebaseDataSource(FirebaseDataSource dataSource){
+        return dataSource;
+    }
+
+    @Provides
+    @Singleton
+    public InternalStorageInterface providesInternalStorage(InternalStorageDataSource dataSource){
         return dataSource;
     }
 

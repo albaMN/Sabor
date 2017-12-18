@@ -1,3 +1,12 @@
 <resources>
-    <string name="app_name">Saborcito</string>
+    <string name="app_name">Sabor</string>
+    <string name="app_receipts">Receipts</string>
+    <string name="app_profile">My account</string>
+    <string name="facebook_app_id">181417509080520</string>
+    <string name="fb_login_protocol_scheme">fb181417509080520</string>
+    <string name="web_client_google">203669523153-8ifdnb7hrj91dvbgsi257bviv1sfkke3.apps.googleusercontent.com</string>
+    <string name="cancel">Cancel</string>
+    <string name="add">Add</string>
+    <string name="hint_ing">Ingredient to add</string>
+    <string name="google_maps_key">AIzaSyC_V7Df7QGMOZa1NI9wFCqGZ9efDhpYopE</string>
 </resources>

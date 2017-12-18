@@ -4,116 +4,126 @@
     android:orientation="vertical">
 
 
-    <FrameLayout
-        android:id="@+id/register_tool"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="260dp">
-
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="260dp"
-            android:background="@drawable/especiasoscuras" />
-
+        android:layout_height="fill_parent"
+        android:layout_weight="1"
+        android:gravity="center">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center|bottom"
-            android:background="#80000000"
+            android:orientation="vertical" >
 
-            android:orientation="horizontal">
+            <FrameLayout
+                android:id="@+id/register_tool"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="20dp">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="260dp"
+                    android:background="@drawable/especiasoscuras" />
 
 
-            <TextView
-                android:id="@+id/signin"
-                android:layout_width="0dp"
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center|bottom"
+                    android:background="#80000000"
+
+                    android:orientation="horizontal">
+
+
+                    <TextView
+                        android:id="@+id/signin"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:padding="16dp"
+                        android:text="Sign in"
+                        android:textColor="#fff"
+                        android:textSize="16dp" />
+
+
+                    <TextView
+                        android:id="@+id/signup"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:padding="16dp"
+                        android:text="Sign Up"
+                        android:textColor="#087272"
+                        android:textSize="16dp" />
+
+
+                </LinearLayout>
+
+
+                <ImageView
+                    android:layout_width="119dp"
+                    android:layout_height="122dp"
+                    android:layout_gravity="center|top"
+                    android:layout_marginTop="60dp"
+                    android:background="@drawable/logo_lettersombra" />
+
+            </FrameLayout>
+
+            <customfonts.MyEditText
+                android:id="@+id/reg_email"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:padding="16dp"
-                android:text="Sign in"
-                android:textColor="#fff"
-                android:textSize="16dp" />
+                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="20dp"
+                android:background="#f0f0f4"
+                android:drawableLeft="@drawable/ic_shapes_2"
+                android:drawablePadding="16dp"
+                android:hint="E-mail"
+                android:inputType="text"
+                android:padding="12dp"
+                android:textColor="#000" />
 
-
-            <TextView
-                android:id="@+id/signup"
-                android:layout_width="0dp"
+            <customfonts.MyEditText
+                android:id="@+id/reg_password"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:padding="16dp"
-                android:text="Sign Up"
-                android:textColor="#087272"
-                android:textSize="16dp" />
+                android:layout_marginBottom="20dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="20dp"
+                android:background="#f0f0f4"
+                android:drawableLeft="@drawable/ic_tool_6"
+                android:drawablePadding="16dp"
+                android:hint="Password"
+                android:inputType="textPassword"
+                android:padding="12dp"
+                android:textColor="#000" />
 
+            <customfonts.MyEditText
+                android:id="@+id/reg_username"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="10dp"
+                android:background="#f0f0f4"
+                android:drawableLeft="@drawable/ic_shape_1"
+                android:drawablePadding="16dp"
+                android:hint="Username"
+                android:inputType="text"
+                android:padding="12dp"
+                android:textColor="#000" />
 
         </LinearLayout>
 
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center|top"
-            android:layout_marginTop="60dp"
-            android:background="@drawable/ic_white" />
-
-    </FrameLayout>
-
-
-    <customfonts.MyEditText
-       android:id="@+id/reg_email"
-       android:layout_width="match_parent"
-       android:layout_height="wrap_content"
-       android:hint="E-mail"
-       android:inputType="text"
-       android:textColor="#000"
-       android:background="#f0f0f4"
-       android:padding="12dp"
-       android:layout_marginTop="15dp"
-       android:layout_marginBottom="5dp"
-       android:layout_marginLeft="20dp"
-       android:layout_marginRight="20dp"
-       android:drawableLeft="@drawable/ic_shapes_2"
-       android:drawablePadding="16dp"
-       />
-
-    <customfonts.MyEditText
-        android:id="@+id/reg_username"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Username"
-        android:inputType="text"
-        android:textColor="#000"
-        android:background="#f0f0f4"
-        android:padding="12dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:drawableLeft="@drawable/ic_shape_1"
-        android:drawablePadding="16dp"
-        />
-
-
-    <customfonts.MyEditText
-        android:id="@+id/reg_password"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Password"
-        android:inputType="textPassword"
-        android:background="#f0f0f4"
-        android:textColor="#000"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="20dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:padding="12dp"
-        android:drawableLeft="@drawable/ic_tool_6"
-        android:drawablePadding="16dp"
-        />
 
 
     <customfonts.MyRegulerText
@@ -121,7 +131,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/rounded1"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="20dp"
         android:layout_marginBottom="10dp"
         android:layout_marginLeft="70dp"
         android:layout_marginRight="70dp"
@@ -133,21 +143,19 @@
         />
 
 
-
-
-
     <customfonts.MyTextView
         android:id="@+id/fb"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
+        android:layout_marginBottom="15dp"
         android:text="Connect with Facebook"
         android:textSize="16dp"
         android:layout_gravity="center" />
 
 
 
-
+    </ScrollView>
 
 
 

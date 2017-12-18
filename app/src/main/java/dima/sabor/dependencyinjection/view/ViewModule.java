@@ -4,6 +4,7 @@ import dagger.Module;
 import dagger.Provides;
 import dima.sabor.base.BaseActivity;
 import dima.sabor.login.SignInActivityImpl;
+import dima.sabor.profile.OptionsProfileActivityImpl;
 import dima.sabor.profile.ProfileActivityImpl;
 import dima.sabor.splash.SplashActivityImpl;
 
@@ -35,6 +36,11 @@ public class ViewModule {
     @Provides
     ProfileActivityImpl providesProfileView(){
         return (ProfileActivityImpl) view;
+    }
+
+    @Provides
+    OptionsProfileActivityImpl providesOptionsProfileView() {
+        return (OptionsProfileActivityImpl) view;
     }
 
 }

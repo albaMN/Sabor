@@ -1,12 +1,12 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.2"
+    compileSdkVersion 26
+    buildToolsVersion "26.0.1"
     defaultConfig {
         applicationId "dima.sabor"
         minSdkVersion 19
-        targetSdkVersion 25
+        targetSdkVersion 26
         versionCode 1
         versionName "1.0"
         multiDexEnabled true
@@ -32,10 +32,6 @@ dependencies {
     })
 
     testCompile 'junit:junit:4.12'
-
-    /*//Project
-    compile project(':domain')
-    compile project(':data')*/
 
     //Libraries
     compile "com.android.support:appcompat-v7:$androidSupportVersion"
@@ -65,6 +61,9 @@ dependencies {
     compile "com.google.firebase:firebase-core:$firebaseVersion"
     compile "com.google.firebase:firebase-messaging:$firebaseVersion"
     compile 'com.facebook.android:facebook-android-sdk:[4,5)'
+
+    //Google places
+    compile "com.google.android.gms:play-services-places:$firebaseVersion"
 
     //Common Test dependencies
     compile "org.mockito:mockito-core:$mockitoVersion"

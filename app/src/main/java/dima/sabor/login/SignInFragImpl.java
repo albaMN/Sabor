@@ -8,11 +8,13 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import customfonts.MyRegulerText;
 import dima.sabor.R;
+import dima.sabor.utils.FormatChecker;
 
 public class SignInFragImpl extends Fragment implements View.OnClickListener {
 
@@ -40,56 +42,40 @@ public class SignInFragImpl extends Fragment implements View.OnClickListener {
 
         ButterKnife.bind(this, rootView);
 
-        buttonsignin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                String emailString = email.getText().toString();
-                String passwordString = password.getText().toString();
-
-                ((SignInActivityImpl) getActivity()).onLoginPressed(emailString, passwordString);
-
-            }
-        });
-
-        signup.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ((SignInActivityImpl) getActivity()).openRegisterFragment();
-            }
-        });
+        buttonsignin.setOnClickListener(this);
+        signup.setOnClickListener(this);
+        fb.setOnClickListener(this);
+        googl.setOnClickListener(this);
 
         return rootView;
     }
 
     @Override
     public void onClick(View v) {
-        /*switch(v.getId()){
-            case R.id.register_button:
-                String nombre = e_nombre.getText().toString();
-                String apellidos = e_apellidos.getText().toString();
-                String contraseña = e_contraseña.getText().toString();
-                String repcontraseña = e_repcontraseña.getText().toString();
-                String teléfono = e_telefono.getText().toString();
-                String mail = e_mail.getText().toString();
-                String año = e_año.getText().toString();
-                String mes = e_mes.getText().toString();
-                String dia = e_dia.getText().toString();
-                String fecha = año + "-" + mes + "-" + dia;
+        switch(v.getId()){
+            case R.id.buttonsignin:
+                String emailString = email.getText().toString();
+                String passwordString = password.getText().toString();
                 try {
-                    FormatChecker.CheckName(nombre);
-                    FormatChecker.CheckUser(nombre+" "+apellidos);
-                    FormatChecker.CheckPassword(contraseña,repcontraseña);
-                    FormatChecker.CheckPhone(teléfono);
-                    FormatChecker.CheckEmail(mail);
-                    FormatChecker.CheckDate(fecha);
-                    activity.onRegisterPressed(nombre,apellidos,contraseña,teléfono,mail,fecha);
-
+                    FormatChecker.CheckEmail(emailString);
+                    FormatChecker.CheckPassword(passwordString);
+                    ((SignInActivityImpl) getActivity()).onLoginPressed(emailString, passwordString);
                 } catch (Exception e) {
                     Toast.makeText(getActivity().getApplicationContext(),
                             e.getMessage(), Toast.LENGTH_LONG).show();
                 }
                 break;
-        }*/
+            case R.id.signup:
+                ((SignInActivityImpl) getActivity()).openRegisterFragment();
+                break;
+            case R.id.fbButt:
+                ((SignInActivityImpl) getActivity()).onFacebookPressed();
+                break;
+            case R.id.googleButt:
+                ((SignInActivityImpl) getActivity()).onGooglePressed();
+                break;
+
+        }
     }
+
 }
