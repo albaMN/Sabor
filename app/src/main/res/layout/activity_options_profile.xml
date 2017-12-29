@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimaryDark"
+    android:id="@+id/optionsProf">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@drawable/rounded_activity"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true">
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:paddingTop="8dp">
+
+            <ImageButton
+                android:id="@+id/optionsProf_close_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:background="@null"
+                android:padding="8dp"
+                android:scaleType="fitCenter"
+                android:src="@mipmap/close_icon" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_toRightOf="@id/optionsProf_close_button"
+                android:gravity="center_vertical"
+                android:text="Edit profile"
+                android:textSize="18sp" />
+
+        </RelativeLayout>
+
+
+
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="8dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:gravity="center"
+                        android:paddingEnd="24dp"
+                        android:paddingStart="24dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentStart="true"
+                            android:text="Change user name"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/user_profile_name_opt"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:text="Jordi Estapou"
+                            android:textSize="16sp" />
+
+                    </RelativeLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginLeft="4dp"
+                        android:layout_marginRight="4dp"
+                        android:background="#E0E0E0" />
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:gravity="center"
+                        android:paddingEnd="24dp"
+                        android:paddingStart="24dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentStart="true"
+                            android:text="Change e-mail"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/user_profile_email_opt"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:text="jordi@alpou.com"
+                            android:textSize="16sp" />
+
+                    </RelativeLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginLeft="4dp"
+                        android:layout_marginRight="4dp"
+                        android:background="#E0E0E0" />
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:gravity="center"
+                        android:paddingEnd="24dp"
+                        android:paddingStart="24dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentStart="true"
+                            android:text="Change password"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/user_profile_password_opt"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:text="***********"
+                            android:textSize="16sp" />
+
+                    </RelativeLayout>
+
+                    <customfonts.MyRegulerText
+                        android:id="@+id/delete_user_but"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="30dp"
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginLeft="70dp"
+                        android:layout_marginRight="70dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/rounded1"
+                        android:padding="14dp"
+                        android:text="Delete user"
+                        android:textAlignment="center"
+                        android:textColor="#fff"
+                        android:textSize="16dp" />
+
+                </LinearLayout>
+
+                <!--Button
+                    android:id="@+id/delete_user_but"
+                    style="@style/Widget.AppCompat.Button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginEnd="36dp"
+                    android:layout_marginTop="170dp"
+                    android:backgroundTint="@color/colorAccent"
+                    android:elevation="0dp"
+                    android:isScrollContainer="false"
+                    android:text="Delete user"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                    android:visibility="visible" /-->
+
+
+            </android.support.v7.widget.CardView>
+
+
+    </LinearLayout>
+
+
+</RelativeLayout>
