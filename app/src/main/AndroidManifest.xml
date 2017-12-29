@@ -62,11 +62,11 @@
         <activity android:name=".menu.MenuActivityImpl">
         </activity>
 
-        <activity android:name=".addRecipe.AddRecipeActivityImpl">
+        <activity android:name=".recipesList.RecipesListActivityImpl"
+            android:label="@string/app_recipes">
         </activity>
 
-        <activity android:name=".receiptsList.ReceiptsListActivityImpl"
-            android:label="@string/app_receipts">
+        <activity android:name=".addRecipe.AddRecipeActivityImpl">
         </activity>
 
         <activity android:name=".profile.ProfileActivityImpl"
@@ -75,6 +75,10 @@
 
         <activity android:name=".profile.OptionsProfileActivityImpl">
         </activity>
+
+        <activity android:name=".recipeDetails.RecipeDetailsActivityImpl">
+        </activity>
+
 
 
         <provider

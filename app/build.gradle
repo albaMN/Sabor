@@ -54,13 +54,14 @@ dependencies {
     compile "com.jakewharton:butterknife:$butterknifeVersion"
     annotationProcessor "com.jakewharton:butterknife-compiler:$butterknifeVersion"
 
-    //Firebase authentication
+    //Firebase 
     compile "com.google.firebase:firebase-auth:$firebaseVersion"
     compile "com.google.android.gms:play-services-auth:$firebaseVersion"
     compile "com.google.firebase:firebase-database:$firebaseVersion"
     compile "com.google.firebase:firebase-core:$firebaseVersion"
     compile "com.google.firebase:firebase-messaging:$firebaseVersion"
     compile 'com.facebook.android:facebook-android-sdk:[4,5)'
+    compile 'com.firebaseui:firebase-ui-database:1.0.0'
 
     //Google places
     compile "com.google.android.gms:play-services-places:$firebaseVersion"

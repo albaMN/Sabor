@@ -1,6 +1,7 @@
 package dima.sabor.profile;
 
 import android.annotation.TargetApi;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -15,13 +16,17 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,6 +35,8 @@ import com.squareup.picasso.Picasso;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -40,6 +47,7 @@ import dima.sabor.dependencyinjection.App;
 import dima.sabor.dependencyinjection.activity.ActivityModule;
 import dima.sabor.dependencyinjection.view.ViewModule;
 import dima.sabor.menu.MenuActivityImpl;
+import dima.sabor.model.Recipe;
 import dima.sabor.model.User;
 
 import static android.Manifest.permission.CAMERA;
@@ -56,6 +64,9 @@ public class ProfileActivityImpl extends MenuActivityImpl implements ProfileActi
     private String profileimage;
     private String nPath;
 
+    private List<Recipe> mylistrecipes;
+    private List<Recipe> myfavourites;
+
     @Inject
     ProfilePresenter presenter;
 
@@ -71,15 +82,17 @@ public class ProfileActivityImpl extends MenuActivityImpl implements ProfileActi
     @BindView(R.id.user_profile_email)
     TextView userEmail;
 
-    @BindView(R.id.receipts)
-    LinearLayout receipts;
+    @BindView(R.id.tabHostProfile)
+    TabHost tabHost;
 
-    @BindView(R.id.favourites)
-    LinearLayout favourites;
+    @BindView(R.id.user_recipes_recycler_view)
+    RecyclerView recyclerView;
+
+    RecyclerView.Adapter adapter;
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
@@ -91,6 +104,54 @@ public class ProfileActivityImpl extends MenuActivityImpl implements ProfileActi
 
         ButterKnife.bind(this);
         showProfile();
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+
+        recyclerView.setLayoutManager(layoutManager);
+
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
+                layoutManager.getOrientation());
+        recyclerView.addItemDecoration(dividerItemDecoration);
+
+
+        mylistrecipes = new ArrayList<Recipe>();
+        myfavourites = new ArrayList<Recipe>();
+        presenter.getMyRecipes();
+        presenter.getMyFavourites();
+
+        tabHost.setup();
+        TabHost.TabSpec tab1 = tabHost.newTabSpec("First Tab");
+        TabHost.TabSpec tab2 = tabHost.newTabSpec("Second Tab");
+
+        tab1.setIndicator("Recipes");
+        tab1.setContent(new FakeView(getApplicationContext())/*new TabHost.TabContentFactory() {
+            public View createTabContent(String arg0) {
+                return recyclerView;
+            }
+        }*/);
+
+        tab2.setIndicator("Favourites");
+        tab2.setContent(new TabHost.TabContentFactory() {
+            public View createTabContent(String arg0) {
+                return recyclerView;
+            }
+        });
+
+        tabHost.addTab(tab1);
+        tabHost.addTab(tab2);
+
+
+        tabHost.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
+            @Override
+            public void onTabChanged(String s) {
+                if(s.equals("First tab")) {
+                    generateRecipes(mylistrecipes);
+                }
+                else if(s.equals("Second tab")) {
+                    generateRecipes(myfavourites);
+                }
+            }
+        });
 
         options.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -107,20 +168,45 @@ public class ProfileActivityImpl extends MenuActivityImpl implements ProfileActi
                 changeProfileImage();
             }
         });
-        /*userChangeUsername.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                changeUsername();
-            }
-        });
 
-        userChangePassword.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                changePassword();
-            }
-        });*/
     }
+
+    class FakeView implements TabHost.TabContentFactory {
+        Context context;
+
+        public FakeView(Context ctx) {
+            context = ctx;
+        }
+
+        @Override
+        public View createTabContent(String name) {
+
+            View view = new View(context);
+            view.setMinimumHeight(0);
+            view.setMinimumWidth(0);
+            return view;
+        }
+    }
+
+    public void generateRecipes(List<Recipe> recipes) {
+
+        adapter = new UserRecipesRecyclerViewAdapter(this, recipes) {
+            @Override
+            public void onItemClick(String gson) {
+                /*Intent intent = new Intent(UserProductsListActivityImpl.this, UserProductDetailsActivityImpl.class);
+                intent.putExtra("product", gson);
+                startActivity(intent);*/
+            }
+        };
+        recyclerView.setAdapter(adapter);
+    }
+
+    public void addRecipe(Recipe recipe) {
+       mylistrecipes.add(recipe);
+       Toast.makeText(getApplicationContext(), "Title: " + recipe.getTitle(), Toast.LENGTH_SHORT).show();
+
+    }
+
 
     public void showProfile() {
         presenter.showProfile();

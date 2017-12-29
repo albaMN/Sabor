@@ -6,6 +6,12 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+import dima.sabor.base.executor.JobExecutor;
+import dima.sabor.base.executor.PostExecutionThread;
+import dima.sabor.base.executor.ThreadExecutor;
+import dima.sabor.base.executor.UIThread;
+import dima.sabor.base.useCase.RepositoryInterface;
+import dima.sabor.data.AppRepository;
 import dima.sabor.data.FirebaseInterface;
 import dima.sabor.data.InternalStorageInterface;
 import dima.sabor.data.impl.FirebaseDataSource;
@@ -43,7 +49,7 @@ public class ApplicationModule {
         return dataSource;
     }
 
-    /*@Provides
+    @Provides
     @Singleton
     public ThreadExecutor proviedesThreadExecutor(){
         return new JobExecutor();
@@ -57,19 +63,14 @@ public class ApplicationModule {
 
     @Provides
     @Singleton
-    public ApiInterface providesApiDataSource(ApiDataSource dataSource){
-        return dataSource;
-    }
-
-    @Provides
-    @Singleton
     public RepositoryInterface providesAppRepository(AppRepository repository){
         return repository;
     }
 
-    @Provides
+
+    /*@Provides
     @Singleton
-    public InternalStorageInterface providesInternalStorage(InternalStorageDataSource dataSource){
+    public ApiInterface providesApiDataSource(ApiDataSource dataSource){
         return dataSource;
     }*/
 }

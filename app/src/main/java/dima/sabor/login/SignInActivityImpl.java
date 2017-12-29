@@ -24,7 +24,7 @@ import dima.sabor.dependencyinjection.App;
 import dima.sabor.dependencyinjection.activity.ActivityModule;
 import dima.sabor.dependencyinjection.view.ViewModule;
 import dima.sabor.model.User;
-import dima.sabor.receiptsList.ReceiptsListActivityImpl;
+import dima.sabor.recipesList.RecipesListActivityImpl;
 
 public class SignInActivityImpl extends BaseActivityImpl implements SignInActivity {
 
@@ -103,7 +103,7 @@ public class SignInActivityImpl extends BaseActivityImpl implements SignInActivi
     }
 
     public void changeActivity(){
-        startActivity(new Intent(SignInActivityImpl.this, ReceiptsListActivityImpl.class));
+        startActivity(new Intent(SignInActivityImpl.this, RecipesListActivityImpl.class));
         finish();
     }
 

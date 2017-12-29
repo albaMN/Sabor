@@ -2,10 +2,14 @@ package dima.sabor.dependencyinjection.view;
 
 import dagger.Module;
 import dagger.Provides;
+import dima.sabor.addRecipe.AddRecipeActivityImpl;
 import dima.sabor.base.BaseActivity;
 import dima.sabor.login.SignInActivityImpl;
+import dima.sabor.menu.MenuActivityImpl;
 import dima.sabor.profile.OptionsProfileActivityImpl;
 import dima.sabor.profile.ProfileActivityImpl;
+import dima.sabor.recipeDetails.RecipeDetailsActivityImpl;
+import dima.sabor.recipesList.RecipesListActivityImpl;
 import dima.sabor.splash.SplashActivityImpl;
 
 
@@ -34,8 +38,8 @@ public class ViewModule {
     }
 
     @Provides
-    ProfileActivityImpl providesProfileView(){
-        return (ProfileActivityImpl) view;
+    MenuActivityImpl providesMenuView() {
+        return (MenuActivityImpl) view;
     }
 
     @Provides
@@ -43,4 +47,23 @@ public class ViewModule {
         return (OptionsProfileActivityImpl) view;
     }
 
+    @Provides
+    AddRecipeActivityImpl providesAddRecipeView() {
+        return (AddRecipeActivityImpl) view;
+    }
+
+    @Provides
+    RecipesListActivityImpl providesShowRecipesView() {
+        return (RecipesListActivityImpl) view;
+    }
+
+    @Provides
+    ProfileActivityImpl providesProfileView(){
+        return (ProfileActivityImpl) view;
+    }
+
+    @Provides
+    RecipeDetailsActivityImpl providesRecipeDetailsView(){
+        return (RecipeDetailsActivityImpl) view;
+    }
 }

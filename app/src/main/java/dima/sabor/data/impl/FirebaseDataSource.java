@@ -20,81 +20,44 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 
 import dima.sabor.R;
 import dima.sabor.base.BaseActivityImpl;
 import dima.sabor.data.FirebaseInterface;
+import dima.sabor.data.listener.ErrorBundle;
+import dima.sabor.data.listener.FirebaseRecipeListener;
+import dima.sabor.model.Recipe;
 import dima.sabor.model.User;
 
 public class FirebaseDataSource implements FirebaseInterface {
 
-        private static final String TAG = "EmailPassword";
+    private static final String TAG = "EmailPassword";
+    private static final String TAGLOG = "LogListener";
 
-        private Application application;
+    private Application application;
 
-        private FirebaseAuth mAuth;
-        private DatabaseReference databaseRef;
+    private FirebaseAuth mAuth;
+    private DatabaseReference databaseRef;
 
-        // for google
-        private GoogleApiClient googleApiClient;
+    // for google
+    private GoogleApiClient googleApiClient;
 
-        // for facebook
-        private CallbackManager callbackManager;
+    // for facebook
+    private CallbackManager callbackManager;
 
+    private ChildEventListener listener;
 
-      /*  @Override
-        public void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-           setContentView(R.layout.activity_emailpassword);
-
-            // Views
-            mStatusTextView = findViewById(R.id.status);
-            mDetailTextView = findViewById(R.id.detail);
-            mEmailField = findViewById(R.id.field_email);
-            mPasswordField = findViewById(R.id.field_password);
-
-            // Buttons
-            findViewById(R.id.email_sign_in_button).setOnClickListener(this);
-            findViewById(R.id.email_create_account_button).setOnClickListener(this);
-            findViewById(R.id.sign_out_button).setOnClickListener(this);
-            findViewById(R.id.verify_email_button).setOnClickListener(this);
-
-            // [START initialize_auth]
-            mAuth = FirebaseAuth.getInstance();
-            // [END initialize_auth]
-        }
-
-          // [START on_start_check_user]
-        @Override
-        public void onStart() {
-            super.onStart();
-            // Check if User is signed in (non-null) and update UI accordingly.
-            FirebaseUser currentUser = mAuth.getCurrentUser();
-            //updateUI(currentUser);
-        }
-        // [END on_start_check_user]
-
-
-
-                @Override
-        public void onClick(View v) {
-           int i = v.getId();
-            if (i == R.id.email_create_account_button) {
-                createAccount(mEmailField.getText().toString(), mPasswordField.getText().toString());
-            } else if (i == R.id.email_sign_in_button) {
-                signIn(mEmailField.getText().toString(), mPasswordField.getText().toString());
-            } else if (i == R.id.sign_out_button) {
-                signOut();
-            } else if (i == R.id.verify_email_button) {
-                sendEmailVerification();
-            }
-        }
-
-        */
 
     @Inject
     public FirebaseDataSource() {
@@ -230,19 +193,6 @@ public class FirebaseDataSource implements FirebaseInterface {
         }
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
     /* private void sendEmailVerification() {
         // Disable button
         findViewById(R.id.verify_email_button).setEnabled(false);
@@ -318,5 +268,159 @@ public class FirebaseDataSource implements FirebaseInterface {
         }
     }
     */
+
+    //ADD RECIPE
+    @Override
+    public String addRecipe(Recipe recipe) {
+        DatabaseReference pushedPostRef = databaseRef.child("recipes").push();
+        String recipeId = pushedPostRef.getKey();
+        recipe.setId(recipeId);
+        pushedPostRef.setValue(recipe);
+        databaseRef.child("users").child(recipe.getUserId()).child("recipes").child(recipe.getId()).setValue(recipe);
+        return recipeId;
+    }
+
+    //GET LIST RECIPES
+    @Override
+    public void getMyRecipes(final String userId, final FirebaseRecipeListener dataCallback) {
+
+        //final List<Recipe> myRecipes = new ArrayList<>();
+
+      /*databaseRef.child("users").child(userId).child("recipes").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Iterable<DataSnapshot> children = dataSnapshot.getChildren();
+                for(DataSnapshot child: children) {
+                    Recipe recipe = child.getValue(Recipe.class);
+                    myRecipes.add(recipe);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                System.out.println("The read failed: " + databaseError.getCode());
+            }
+        });*/
+
+        //return myRecipes;
+
+        this.listener = new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                Log.d(TAGLOG, "onChildAdded: {" + dataSnapshot.getKey() + ": " + dataSnapshot.getValue() + "}");
+                /*HashMap<String, Recipe> firebaseResponse = (HashMap<String, Recipe>) dataSnapshot.getValue();
+
+                List<Recipe> result = new ArrayList<>();
+
+                for(Map.Entry<String,Recipe> entry: firebaseResponse.entrySet()){
+                    result.add(entry.getValue());
+                }*/
+                dataCallback.onNewRecipe(dataSnapshot.getValue(Recipe.class));
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                Log.d(TAGLOG, "onChildChanged: {" + dataSnapshot.getKey() + ": " + dataSnapshot.getValue() + "}");
+                dataCallback.onNewRecipe(dataSnapshot.getValue(Recipe.class));
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+                Log.d(TAGLOG, "onChildRemoved: {" + dataSnapshot.getKey() + ": " + dataSnapshot.getValue() + "}");
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+                Log.d(TAGLOG, "onChildMoved: " + dataSnapshot.getKey());
+            }
+
+            @Override
+            public void onCancelled(final DatabaseError databaseError) {
+                Log.e(TAGLOG, "Error!", databaseError.toException());
+                dataCallback.onError(new ErrorBundle() {
+                    @Override
+                    public Exception getException() {
+                        return databaseError.toException();
+                    }
+
+                    @Override
+                    public String getErrorMessage() {
+                        return databaseError.getMessage();
+                    }
+                });
+            }
+        };
+
+        databaseRef.child("users").child(userId).child("recipes").addChildEventListener(listener);
+
+
+    }
+
+    @Override
+    public List<Recipe> getMyFavourites(String userID) {
+        final List<Recipe> myFavourites = new ArrayList<>();
+        databaseRef.child("user").child(userID).child("favourites").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Iterable<DataSnapshot> children = dataSnapshot.getChildren();
+                for(DataSnapshot child: children) {
+                    Recipe recipe = child.getValue(Recipe.class);
+                    myFavourites.add(recipe);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+        return myFavourites;
+    }
+
+    @Override
+    public void getRecipes(final FirebaseRecipeListener dataCallback) {
+        this.listener = new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                Log.d(TAGLOG, "onChildAdded: {" + dataSnapshot.getKey() + ": " + dataSnapshot.getValue() + "}");
+                dataCallback.onNewRecipe(dataSnapshot.getValue(Recipe.class));
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                Log.d(TAGLOG, "onChildChanged: {" + dataSnapshot.getKey() + ": " + dataSnapshot.getValue() + "}");
+                dataCallback.onNewRecipe(dataSnapshot.getValue(Recipe.class));
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+                Log.d(TAGLOG, "onChildRemoved: {" + dataSnapshot.getKey() + ": " + dataSnapshot.getValue() + "}");
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+                Log.d(TAGLOG, "onChildMoved: " + dataSnapshot.getKey());
+            }
+
+            @Override
+            public void onCancelled(final DatabaseError databaseError) {
+                Log.e(TAGLOG, "Error!", databaseError.toException());
+                dataCallback.onError(new ErrorBundle() {
+                    @Override
+                    public Exception getException() {
+                        return databaseError.toException();
+                    }
+
+                    @Override
+                    public String getErrorMessage() {
+                        return databaseError.getMessage();
+                    }
+                });
+            }
+        };
+
+        databaseRef.child("recipes").addChildEventListener(listener);
+    }
+
 
 }
