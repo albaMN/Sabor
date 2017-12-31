@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.util.Base64;
-import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -121,7 +120,7 @@ public class RecipeDetailsActivityImpl extends BaseActivityImpl implements Recip
         description.setText(recipe.getDescription());
         difficulty.setText(recipe.getDifficulty());
         people.setText(recipe.getPeople());
-        time.setText(recipe.getTime());
+        time.setText(recipe.getTime()+"h");
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_list_item_1, recipe.getIngredients());
 
@@ -131,7 +130,7 @@ public class RecipeDetailsActivityImpl extends BaseActivityImpl implements Recip
     }
 
     public void setUpViewPager(List<String> images) {
-        Log.i("Images", "images1: "+ images.get(0));
+        //Log.i("Images", "images1: "+ images.get(0));
         List<Bitmap> imagesUrl = new ArrayList<>();
         for(String image: images) {
             byte[] decodedString = Base64.decode(image, Base64.DEFAULT);

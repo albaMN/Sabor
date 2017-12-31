@@ -28,7 +28,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -36,6 +38,7 @@ import dima.sabor.R;
 import dima.sabor.base.BaseActivityImpl;
 import dima.sabor.data.FirebaseInterface;
 import dima.sabor.data.listener.ErrorBundle;
+import dima.sabor.data.listener.FirebaseFavsListener;
 import dima.sabor.data.listener.FirebaseRecipeListener;
 import dima.sabor.model.Recipe;
 import dima.sabor.model.User;
@@ -57,7 +60,7 @@ public class FirebaseDataSource implements FirebaseInterface {
     private CallbackManager callbackManager;
 
     private ChildEventListener listener;
-
+    private ValueEventListener listener2;
 
     @Inject
     public FirebaseDataSource() {
@@ -315,18 +318,27 @@ public class FirebaseDataSource implements FirebaseInterface {
                 for(Map.Entry<String,Recipe> entry: firebaseResponse.entrySet()){
                     result.add(entry.getValue());
                 }*/
-                dataCallback.onNewRecipe(dataSnapshot.getValue(Recipe.class));
+                //dataCallback.onNewRecipe(dataSnapshot.getValue(Recipe.class));
+                Map<String, Recipe> hm = new HashMap<String, Recipe>();
+                hm.put("add", dataSnapshot.getValue(Recipe.class));
+                dataCallback.onNewRecipe(hm);
             }
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
                 Log.d(TAGLOG, "onChildChanged: {" + dataSnapshot.getKey() + ": " + dataSnapshot.getValue() + "}");
-                dataCallback.onNewRecipe(dataSnapshot.getValue(Recipe.class));
+               // dataCallback.onNewRecipe(dataSnapshot.getValue(Recipe.class));
+                Map<String, Recipe> hm = new HashMap<String, Recipe>();
+                hm.put("changed", dataSnapshot.getValue(Recipe.class));
+                dataCallback.onNewRecipe(hm);
             }
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
                 Log.d(TAGLOG, "onChildRemoved: {" + dataSnapshot.getKey() + ": " + dataSnapshot.getValue() + "}");
+                Map<String, Recipe> hm = new HashMap<String, Recipe>();
+                hm.put("removed", dataSnapshot.getValue(Recipe.class));
+                dataCallback.onNewRecipe(hm);
             }
 
             @Override
@@ -357,44 +369,32 @@ public class FirebaseDataSource implements FirebaseInterface {
     }
 
     @Override
-    public List<Recipe> getMyFavourites(String userID) {
-        final List<Recipe> myFavourites = new ArrayList<>();
-        databaseRef.child("user").child(userID).child("favourites").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Iterable<DataSnapshot> children = dataSnapshot.getChildren();
-                for(DataSnapshot child: children) {
-                    Recipe recipe = child.getValue(Recipe.class);
-                    myFavourites.add(recipe);
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-        return myFavourites;
-    }
-
-    @Override
     public void getRecipes(final FirebaseRecipeListener dataCallback) {
         this.listener = new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Log.d(TAGLOG, "onChildAdded: {" + dataSnapshot.getKey() + ": " + dataSnapshot.getValue() + "}");
-                dataCallback.onNewRecipe(dataSnapshot.getValue(Recipe.class));
+                //dataCallback.onNewRecipe(dataSnapshot.getValue(Recipe.class));
+                Map<String, Recipe> hm = new HashMap<String, Recipe>();
+                hm.put("add", dataSnapshot.getValue(Recipe.class));
+                dataCallback.onNewRecipe(hm);
             }
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
                 Log.d(TAGLOG, "onChildChanged: {" + dataSnapshot.getKey() + ": " + dataSnapshot.getValue() + "}");
-                dataCallback.onNewRecipe(dataSnapshot.getValue(Recipe.class));
+                //dataCallback.onNewRecipe(dataSnapshot.getValue(Recipe.class));
+                Map<String, Recipe> hm = new HashMap<String, Recipe>();
+                hm.put("changed", dataSnapshot.getValue(Recipe.class));
+                dataCallback.onNewRecipe(hm);
             }
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
                 Log.d(TAGLOG, "onChildRemoved: {" + dataSnapshot.getKey() + ": " + dataSnapshot.getValue() + "}");
+                Map<String, Recipe> hm = new HashMap<String, Recipe>();
+                hm.put("removed", dataSnapshot.getValue(Recipe.class));
+                dataCallback.onNewRecipe(hm);
             }
 
             @Override
@@ -422,5 +422,81 @@ public class FirebaseDataSource implements FirebaseInterface {
         databaseRef.child("recipes").addChildEventListener(listener);
     }
 
+    @Override
+    public void isFav(String UserID,final FirebaseFavsListener dataCallback) {
 
+        this.listener2 = /*new ChildEventListener() {
+
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                Log.d(TAGLOG, "onChildAdded: {" + dataSnapshot.getKey() + ": " + dataSnapshot.getValue() + "}");
+                Map<String, Recipe> hm = new HashMap<String, Recipe>();
+                hm.put("add", dataSnapshot.getValue(Recipe.class));
+                dataCallback.onNewRecipe(hm);
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                Log.d(TAGLOG, "onChildChanged: {" + dataSnapshot.getKey() + ": " + dataSnapshot.getValue() + "}");
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+                Log.d(TAGLOG, "onChildRemoved: {" + dataSnapshot.getKey() + ": " + dataSnapshot.getValue() + "}");
+                Map<String, Recipe> hm = new HashMap<String, Recipe>();
+                hm.put("remove", dataSnapshot.getValue(Recipe.class));
+                dataCallback.onNewRecipe(hm);
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+                Log.d(TAGLOG, "onChildMoved: " + dataSnapshot.getKey());
+            }
+
+            @Override
+           public void onCancelled(final DatabaseError databaseError) {
+               Log.e(TAGLOG, "Error!", databaseError.toException());
+               dataCallback.onError(new ErrorBundle() {
+                   @Override
+                   public Exception getException() {
+                       return databaseError.toException();
+                   }
+
+                   @Override
+                   public String getErrorMessage() {
+                       return databaseError.getMessage();
+                   }
+               });
+           }
+       };*/
+        new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                List<Recipe> favs = new ArrayList<>();
+                for (DataSnapshot postSnapshot: snapshot.getChildren()) {
+                    Recipe recipe = postSnapshot.getValue(Recipe.class);
+                    favs.add(recipe);
+                }
+                dataCallback.onNewFav(favs);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.e("ISfav", "onCancelled", databaseError.toException());
+            }
+        };
+
+        databaseRef.child("users").child(UserID).child("favourites").addValueEventListener(listener2);
+
+    }
+
+    @Override
+    public void addFav(String userID,Recipe recipe) {
+        databaseRef.child("users").child(userID).child("favourites").child(recipe.getId()).setValue(recipe);
+    }
+
+    @Override
+    public void deleteFav(String userID, String RecipeID) {
+        databaseRef.child("users").child(userID).child("favourites").child(RecipeID).removeValue();
+    }
 }

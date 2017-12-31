@@ -11,7 +11,7 @@
     android:paddingLeft="16dp">
 
     <ImageView
-        android:id="@+id/user_product_list_image"
+        android:id="@+id/user_recipe_list_image"
         android:layout_centerVertical="true"
         android:layout_width="56dp"
         android:layout_height="56dp"/>
@@ -22,12 +22,12 @@
         android:gravity="center_vertical"
         android:orientation="vertical"
         android:layout_centerVertical="true"
-        android:layout_toEndOf="@id/user_product_list_image"
+        android:layout_toEndOf="@id/user_recipe_list_image"
         android:paddingStart="16dp"
         android:id="@+id/linearLayout">
 
         <TextView
-            android:id="@+id/user_product_list_title"
+            android:id="@+id/user_recipe_list_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textStyle="bold"
@@ -36,16 +36,16 @@
             android:text="Title" />
 
         <TextView
-            android:id="@+id/user_product_list_category"
+            android:id="@+id/user_recipe_list_difficulty"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Categoria" />
+            android:text="Difficulty" />
 
         <TextView
-            android:id="@+id/user_product_list_price"
+            android:id="@+id/user_recipe_list_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="120 - 240 €"/>
+            android:text="Time"/>
 
     </LinearLayout>
 
@@ -58,17 +58,15 @@
         android:src="@mipmap/matchmaking_icon"
         android:layout_centerVertical="true"
         android:layout_alignParentEnd="true" /-->
-    <RatingBar
-        android:id="@+id/user_profile_ratingbar"
-        style="?android:attr/ratingBarStyleIndicator"
-        android:theme="@style/RatingBar"
+    <ImageView
+        android:id="@+id/user_recipe_list_favourite"
         android:layout_width="42dp"
         android:layout_height="42dp"
         android:background="@null"
         android:scaleType="centerCrop"
+        android:src="@mipmap/ic_non_filled_star"
         android:layout_centerVertical="true"
         android:layout_alignParentEnd="true"
-        android:numStars="1"
-        android:rating="1" />
+        android:tag="R.mipmap.ic_non_filled_star"/>
 
 </RelativeLayout>

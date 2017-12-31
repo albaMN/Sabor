@@ -1,7 +1,5 @@
 package dima.sabor.profile;
 
-import java.util.List;
-
 import javax.inject.Inject;
 
 import dima.sabor.data.InternalStorageInterface;
@@ -61,7 +59,7 @@ public class ProfilePresenter {
         });
     }
 
-    public List<Recipe> getMyFavourites() {
-        return firebaseservice.getMyFavourites(getUser().getUid());
+    public void getMyFavourites() {
+        //TODO: implementar
     }
 }

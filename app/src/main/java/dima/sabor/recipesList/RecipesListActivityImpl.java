@@ -29,6 +29,7 @@ import dima.sabor.recipeDetails.RecipeDetailsActivityImpl;
 public class RecipesListActivityImpl extends MenuActivityImpl implements RecipesListActivity {
 
     private List<Recipe> listrecipes;
+    private List<String> listfav;
 
     @Inject
     ShowRecipesPresenter presenter;
@@ -63,7 +64,9 @@ public class RecipesListActivityImpl extends MenuActivityImpl implements Recipes
         recyclerViewRecipes.addItemDecoration(dividerItemDecoration);
 
         listrecipes = new ArrayList<Recipe>();
+        listfav = new ArrayList<String>();
         presenter.getRecipes();
+        presenter.getFav();
 
         generateRecipes(listrecipes);
 
@@ -79,7 +82,7 @@ public class RecipesListActivityImpl extends MenuActivityImpl implements Recipes
     }
 
     public void generateRecipes(List<Recipe> recipes) {
-        Log.i("images","VIEW recipes: "+ recipes);
+       // Log.i("images","VIEW recipes: "+ recipes);
 
         adapter = new RecipesRecyclerViewAdapter(this, recipes) {
             @Override
@@ -87,6 +90,26 @@ public class RecipesListActivityImpl extends MenuActivityImpl implements Recipes
                 Intent intent = new Intent(RecipesListActivityImpl.this, RecipeDetailsActivityImpl.class);
                 intent.putExtra("recipe", gson);
                 startActivity(intent);
+            }
+
+            @Override
+            public void onFavouriteClick(Recipe recipe, boolean add) {
+                if (add) {
+                    Log.i("ADDFAV","list: "+listfav + "   " + recipe.getId());
+                    presenter.addFav(recipe);
+                    //listfav.add(recipe.getId());
+                }
+                else {
+                    Log.i("DELETEFAV","list: "+listfav + "   " + recipe.getId());
+                    presenter.deleteFav(recipe.getId());
+                }
+            }
+
+            @Override
+            public boolean isFav(String RecipeID) {
+                //Log.i("DUDA","La lista contiene la receta1?: " + listfav.contains(RecipeID) +"    "+RecipeID);
+                if(listfav.contains(RecipeID)) return true;
+                else return false;
             }
 
         };
@@ -99,6 +122,14 @@ public class RecipesListActivityImpl extends MenuActivityImpl implements Recipes
         adapter.notifyDataSetChanged();
 
     }
+
+    public void addFavourites(List<String> favs) {
+        Log.i("ALLFAVS", "list: " +favs);
+        listfav.clear();
+        listfav = favs;
+        adapter.notifyDataSetChanged();
+    }
+
 
     @Override
     public void onBackPressed() {

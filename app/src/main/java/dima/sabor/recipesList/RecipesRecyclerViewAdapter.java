@@ -1,16 +1,17 @@
 package dima.sabor.recipesList;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.v7.widget.RecyclerView;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
-import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -39,25 +40,40 @@ public abstract class RecipesRecyclerViewAdapter extends RecyclerView.Adapter<Re
 
     @Override
     public void onBindViewHolder(final ViewHolder viewHolder, final int i) {
-        Picasso.with(context).load(recipe.get(i).getImages().get(0)).into(viewHolder.itemImage);
-      /*  Log.i("images","VIEW product: "+product.get(i).getId()+" images: "+ product.get(i).getImages() );
-        if(product.get(i).getImages()!= null) {
-            byte[] decodedString = Base64.decode(product.get(i).getImages().get(0), Base64.DEFAULT);
+        //Picasso.with(context).load(recipe.get(i).getImages().get(0)).into(viewHolder.itemImage);
+        //Log.i("images","VIEW product: "+product.get(i).getId()+" images: "+ product.get(i).getImages() );
+        if(recipe.get(i).getImages()!= null) {
+            byte[] decodedString = Base64.decode(recipe.get(i).getImages().get(0), Base64.DEFAULT);
             Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
             viewHolder.itemImage.setImageBitmap(decodedByte);
-        }*/
+        }
 
         viewHolder.itemTitle.setText(recipe.get(i).getTitle());
-        viewHolder.itemCategory.setText(recipe.get(i).getDifficulty());
+        viewHolder.itemDifficulty.setText("Difficulty: " + recipe.get(i).getDifficulty());
+        viewHolder.itemTime.setText("Time: "+ recipe.get(i).getTime()+"h");
 
-       /* String priceRange = product.get(i).getMinPrice() + " - " + product.get(i).getMaxPrice() + "€";
-        viewHolder.itemPrice.setText(priceRange);
+        if (isFav(recipe.get(viewHolder.getAdapterPosition()).getId())) {
+            viewHolder.fav.setImageResource(R.mipmap.ic_filled_star);
+        } else {
+            viewHolder.fav.setImageResource(R.mipmap.ic_non_filled_star);
+        }
 
-        viewHolder.itemMatchmaking.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
-                onMatchMakingClick(product.get(viewHolder.getAdapterPosition()).getId());
-            }
-        });*/
+       viewHolder.fav.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View v) {
+               boolean add = true;
+               //TODO: Mirar que la receta no sea mia, si no es mia que directamente no aparezca la imagen
+               if(isFav(recipe.get(viewHolder.getAdapterPosition()).getId())) {
+                   viewHolder.fav.setImageResource(R.mipmap.ic_non_filled_star);
+                   add = false;
+               }
+               else {
+                   viewHolder.fav.setImageResource(R.mipmap.ic_filled_star);
+               }
+
+               onFavouriteClick(recipe.get(viewHolder.getAdapterPosition()), add);
+           }
+       });
 
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
@@ -74,26 +90,27 @@ public abstract class RecipesRecyclerViewAdapter extends RecyclerView.Adapter<Re
     }
 
     abstract public void onItemClick(String gson);
-    //abstract public void  onMatchMakingClick(int productID);
+    abstract public void  onFavouriteClick(Recipe recipe, boolean add);
+    abstract public boolean isFav(String RecipeID);
 
     class ViewHolder extends RecyclerView.ViewHolder{
 
         View itemView;
 
-        @BindView(R.id.user_product_list_image)
+        @BindView(R.id.user_recipe_list_image)
         public ImageView itemImage;
 
-        @BindView(R.id.user_product_list_title)
+        @BindView(R.id.user_recipe_list_title)
         public TextView itemTitle;
 
-        @BindView(R.id.user_product_list_category)
-        public TextView itemCategory;
+        @BindView(R.id.user_recipe_list_difficulty)
+        public TextView itemDifficulty;
 
-        @BindView(R.id.user_product_list_price)
-        public TextView itemPrice;
+        @BindView(R.id.user_recipe_list_time)
+        public TextView itemTime;
 
-        @BindView(R.id.user_profile_ratingbar)
-        public RatingBar ratingBar;
+        @BindView(R.id.user_recipe_list_favourite)
+        public ImageView fav;
 /*
         @BindView(R.id.user_product_list_matchmaking_launch_button)
         public ImageButton itemMatchmaking;
