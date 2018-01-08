@@ -71,6 +71,8 @@ public class AddRecipeActivityImpl extends BaseActivityImpl implements AddRecipe
         private ArrayAdapter<String> arrayAdapter;
         private ArrayList<String> ingredients;
 
+        private String place;
+
         AddRecipeDifficultyFragImpl addDifficultyFrag;
 
         @BindView(R.id.recipeName)
@@ -410,7 +412,7 @@ public class AddRecipeActivityImpl extends BaseActivityImpl implements AddRecipe
             String description = e_description.getText().toString();
             String people = e_people.getText().toString();
             String time = e_time.getText().toString();
-            String place = e_place.getText().toString();
+            //String place = e_place.getText().toString();
             String difficulty = e_difficulty.getText().toString();
             try {
                 RecipeChecker.checkTitle(title);
@@ -449,41 +451,19 @@ public class AddRecipeActivityImpl extends BaseActivityImpl implements AddRecipe
         }
 
 
-     /*  private void onIngredientPressed(final String nomI) {
-
-            final CharSequence[] items = { "Edit ingredient", "Delete", "Cancel" };
-            AlertDialog.Builder builder = new AlertDialog.Builder(AddRecipeActivityImpl.this);
-            builder.setTitle("Ingredient options");
-            builder.setItems(items, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int item) {
-                    if (items[item].equals("Edit ingredient")) {
-                       Bundle bundle = new Bundle();
-                        bundle.putString("nomI", nomI);
-                       FragmentTransaction ft = getFragmentManager().beginTransaction();
-                       AddRecipeIngredientFragImpl reg = AddRecipeIngredientFragImpl.newInstance();
-                        reg.setArguments(bundle);
-                       /*   addFullScreenFragment(new AddRecipeIngredientFragImpl());
-                    } else if (items[item].equals("Delete")) {
-                       listItems.remove(nomI);
-                        nomsIng.remove(nomI);
-                        arrayAdapter.notifyDataSetChanged();
-                    } else if (items[item].equals("Cancel")) {
-                        dialog.dismiss();
-                    }
-                }
-            });
-            builder.show();
-        } */
 
 
         @Override
         protected void onActivityResult(int requestCode, int resultCode, Intent data) {
             if (requestCode == PLACE_PICKER_REQUEST && resultCode == RESULT_OK) {
-                Place place = PlacePicker.getPlace(data, this);
+                Place pl = PlacePicker.getPlace(data, this);
                 //String toastMsg = String.format("Place: %s", place.getName());
                 //Toast.makeText(this, toastMsg, Toast.LENGTH_LONG).show();
-                if(place.getName() != null) e_place.setText(place.getName());
+                if(pl.getName() != null) {
+                    e_place.setText(pl.getName());
+                    place = pl.getName()+"#"+pl.getLatLng().toString();
+                    Log.i("PLACE", "LatLong: "+pl.getLatLng());
+                }
             }
 
             else if (requestCode == PICTURE_TAKEN_FROM_CAMERA && resultCode == RESULT_OK ) {

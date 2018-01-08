@@ -9,7 +9,7 @@ import dima.sabor.base.executor.ThreadExecutor;
 import dima.sabor.base.useCase.BaseUseCase;
 import dima.sabor.base.useCase.DefaultCallback;
 import dima.sabor.base.useCase.Interactor;
-import dima.sabor.base.useCase.RepositoryInterface;
+import dima.sabor.data.RepositoryInterface;
 import dima.sabor.data.listener.ErrorBundle;
 import dima.sabor.model.Recipe;
 

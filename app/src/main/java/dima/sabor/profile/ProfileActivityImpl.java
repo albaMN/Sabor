@@ -1,7 +1,6 @@
 package dima.sabor.profile;
 
 import android.annotation.TargetApi;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -18,6 +17,7 @@ import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -49,6 +49,7 @@ import dima.sabor.dependencyinjection.view.ViewModule;
 import dima.sabor.menu.MenuActivityImpl;
 import dima.sabor.model.Recipe;
 import dima.sabor.model.User;
+import dima.sabor.recipeDetails.RecipeDetailsActivityImpl;
 
 import static android.Manifest.permission.CAMERA;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
@@ -70,8 +71,8 @@ public class ProfileActivityImpl extends MenuActivityImpl implements ProfileActi
     @Inject
     ProfilePresenter presenter;
 
-    @BindView(R.id.options)
-    ImageView options;
+    /*@BindView(R.id.options)
+    ImageView options;*/
 
     @BindView(R.id.user_profile_avatar)
     ImageView userAvatar;
@@ -79,16 +80,20 @@ public class ProfileActivityImpl extends MenuActivityImpl implements ProfileActi
     @BindView(R.id.user_profile_name)
     TextView userName;
 
-    @BindView(R.id.user_profile_email)
-    TextView userEmail;
+    @BindView(R.id.user_profile_num_recipes)
+    TextView userNumRec;
 
     @BindView(R.id.tabHostProfile)
     TabHost tabHost;
 
-    @BindView(R.id.user_recipes_recycler_view)
+    @BindView(R.id.user_recipes_recycler_view2)
     RecyclerView recyclerView;
 
-    RecyclerView.Adapter adapter;
+    @BindView(R.id.user_recipes_recycler_view3)
+    RecyclerView recyclerView2;
+
+    RecyclerView.Adapter adapter1;
+    RecyclerView.Adapter adapter2;
 
 
     @Override
@@ -105,61 +110,47 @@ public class ProfileActivityImpl extends MenuActivityImpl implements ProfileActi
         ButterKnife.bind(this);
         showProfile();
 
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-
-        recyclerView.setLayoutManager(layoutManager);
-
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
-                layoutManager.getOrientation());
-        recyclerView.addItemDecoration(dividerItemDecoration);
-
-
-        mylistrecipes = new ArrayList<Recipe>();
-        myfavourites = new ArrayList<Recipe>();
-        presenter.getMyRecipes();
-        presenter.getMyFavourites();
+        setupMyRecipes();
+        setupMyFavourites();
 
         tabHost.setup();
-        TabHost.TabSpec tab1 = tabHost.newTabSpec("First Tab");
-        TabHost.TabSpec tab2 = tabHost.newTabSpec("Second Tab");
+        TabHost.TabSpec tab1 = tabHost.newTabSpec("RECIPES");
+        TabHost.TabSpec tab2 = tabHost.newTabSpec("FAVOURITES");
 
-        tab1.setIndicator("Recipes");
-        tab1.setContent(new FakeView(getApplicationContext())/*new TabHost.TabContentFactory() {
-            public View createTabContent(String arg0) {
-                return recyclerView;
-            }
-        }*/);
+        tab1.setIndicator("My recipes");
+        tab1.setContent(R.id.layoutMyRecipes);
 
         tab2.setIndicator("Favourites");
-        tab2.setContent(new TabHost.TabContentFactory() {
-            public View createTabContent(String arg0) {
-                return recyclerView;
-            }
-        });
+        tab2.setContent(R.id.layoutMyFavourites);
 
         tabHost.addTab(tab1);
         tabHost.addTab(tab2);
 
+        if(tabHost.getCurrentTab() == 0) generateRecipes(mylistrecipes);
+        else generateFavourites(myfavourites);
 
         tabHost.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
             @Override
             public void onTabChanged(String s) {
-                if(s.equals("First tab")) {
+                if(s.equals("RECIPES")) {
                     generateRecipes(mylistrecipes);
                 }
-                else if(s.equals("Second tab")) {
-                    generateRecipes(myfavourites);
+                else if(s.equals("FAVOURITES")) {
+                    generateFavourites(myfavourites);
                 }
             }
         });
 
+        //TODO: Eliminar todo lo que tenga que ver con las opciones
+
+    /*
         options.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                // addFullScreenFragment(new OptionsProfileFragImpl());
                 startActivity(new Intent(ProfileActivityImpl.this, OptionsProfileActivityImpl.class));
             }
-        });
+        }); */
 
         userAvatar.setOnClickListener(new View.OnClickListener(){
 
@@ -171,40 +162,107 @@ public class ProfileActivityImpl extends MenuActivityImpl implements ProfileActi
 
     }
 
-    class FakeView implements TabHost.TabContentFactory {
-        Context context;
+    public void setupMyRecipes() {
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
 
-        public FakeView(Context ctx) {
-            context = ctx;
-        }
+        recyclerView.setLayoutManager(layoutManager);
 
-        @Override
-        public View createTabContent(String name) {
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
+                layoutManager.getOrientation());
+        recyclerView.addItemDecoration(dividerItemDecoration);
 
-            View view = new View(context);
-            view.setMinimumHeight(0);
-            view.setMinimumWidth(0);
-            return view;
-        }
+        mylistrecipes = new ArrayList<Recipe>();
+        presenter.getMyRecipes();
+
+        generateRecipes(mylistrecipes);
+        Log.i("RECIPES:", "Generating recipes");
+    }
+
+    public void setupMyFavourites() {
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+
+        recyclerView2.setLayoutManager(layoutManager);
+
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView2.getContext(),
+                layoutManager.getOrientation());
+        recyclerView2.addItemDecoration(dividerItemDecoration);
+
+        myfavourites = new ArrayList<Recipe>();
+        presenter.getMyFavourites();
+
+        generateFavourites(myfavourites);
     }
 
     public void generateRecipes(List<Recipe> recipes) {
 
-        adapter = new UserRecipesRecyclerViewAdapter(this, recipes) {
+        adapter1 = new UserRecipesRecyclerViewAdapter(this, recipes) {
             @Override
             public void onItemClick(String gson) {
-                /*Intent intent = new Intent(UserProductsListActivityImpl.this, UserProductDetailsActivityImpl.class);
-                intent.putExtra("product", gson);
-                startActivity(intent);*/
+               // Intent intent = new Intent(ProfileActivityImpl.this, UserProductDetailsActivityImpl.class);
+                //intent.putExtra("recipe", gson);
+                //startActivity(intent);
+            }
+
+            @Override
+            public void onDeletedClick(final Recipe r) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(ProfileActivityImpl.this);
+
+                builder.setMessage("Are you sure you want to delete this recipe permanently?")
+                        .setTitle("Confirmation")
+                        .setPositiveButton("Accept", new DialogInterface.OnClickListener()  {
+                            @Override
+                            public void onClick(DialogInterface dialog, int id) {
+                                Log.i("Dialogs", "Accepted confirmation.");
+                                presenter.deleteRecipe(r);
+                                dialog.cancel();
+                            }
+                        })
+                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int id) {
+                                Log.i("Dialogs", "Denied confirmation.");
+                                dialog.cancel();
+                            }
+                        });
+
+                builder.create().show();
+
             }
         };
-        recyclerView.setAdapter(adapter);
+
+        recyclerView.setAdapter(adapter1);
     }
 
-    public void addRecipe(Recipe recipe) {
-       mylistrecipes.add(recipe);
-       Toast.makeText(getApplicationContext(), "Title: " + recipe.getTitle(), Toast.LENGTH_SHORT).show();
+    public void generateFavourites(List<Recipe> recipes) {
+       adapter2 = new UserFavouritesRecyclerViewAdapter(this, recipes) {
+            @Override
+            public void onItemClick(String gson) {
+                Intent intent = new Intent(ProfileActivityImpl.this, RecipeDetailsActivityImpl.class);
+                intent.putExtra("recipe", gson);
+                startActivity(intent);
+            }
 
+            @Override
+            public void onFavouriteClick(Recipe recipe) {
+                presenter.deleteFav(recipe.getId());
+            }
+        };
+        recyclerView2.setAdapter(adapter2);
+    }
+
+    public void addRecipe(List<Recipe> recipes) {
+       mylistrecipes.clear();
+       mylistrecipes = recipes;
+       userNumRec.setText(String.valueOf(recipes.size()));
+       //adapter1.notifyDataSetChanged();
+       generateRecipes(mylistrecipes);
+    }
+
+    public void addFavourites(List<Recipe> fav) {
+        myfavourites.clear();
+        myfavourites = fav;
+        //adapter2.notifyDataSetChanged();
+        generateFavourites(myfavourites);
     }
 
 
@@ -220,7 +278,7 @@ public class ProfileActivityImpl extends MenuActivityImpl implements ProfileActi
         hideProgress();
         this.user = user;
         userName.setText(user.getUsername());
-        userEmail.setText(user.getEmail());
+        //userNumRec.setText(user.getEmail());
         if(user.getPhoto_url() != "") {
             if (!user.getPhoto_url().contains("http")) {
                 try {

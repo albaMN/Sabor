@@ -11,7 +11,7 @@
     android:paddingLeft="16dp">
 
     <ImageView
-        android:id="@+id/user_recipe_list_image2"
+        android:id="@+id/user_recipe_list_image3"
         android:layout_centerVertical="true"
         android:layout_width="56dp"
         android:layout_height="56dp"/>
@@ -22,12 +22,12 @@
         android:gravity="center_vertical"
         android:orientation="vertical"
         android:layout_centerVertical="true"
-        android:layout_toEndOf="@id/user_recipe_list_image2"
+        android:layout_toEndOf="@id/user_recipe_list_image3"
         android:paddingStart="16dp"
         android:id="@+id/linearLayout">
 
         <TextView
-            android:id="@+id/user_recipe_list_title2"
+            android:id="@+id/user_recipe_list_title3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textStyle="bold"
@@ -36,13 +36,13 @@
             android:text="Title" />
 
         <TextView
-            android:id="@+id/user_recipe_list_difficulty2"
+            android:id="@+id/user_recipe_list_difficulty3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Category" />
 
         <TextView
-            android:id="@+id/user_recipe_list_time2"
+            android:id="@+id/user_recipe_list_time3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Ingredients"/>
@@ -50,13 +50,16 @@
     </LinearLayout>
 
     <ImageView
-        android:id="@+id/user_recipe_list_delete2"
+        android:id="@+id/user_recipe_list_favourite3"
         android:layout_width="42dp"
         android:layout_height="42dp"
         android:background="@null"
         android:scaleType="centerCrop"
-        android:src="@mipmap/delete_icon"
+        android:src="@mipmap/ic_non_filled_star"
         android:layout_centerVertical="true"
-        android:layout_alignParentEnd="true"/>
+        android:layout_alignParentEnd="true"
+        android:tag="R.mipmap.ic_non_filled_star"/>
+
+
 
 </RelativeLayout>

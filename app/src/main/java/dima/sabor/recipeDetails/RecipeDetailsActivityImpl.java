@@ -7,12 +7,19 @@ import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.util.Base64;
+import android.util.Log;
+import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
@@ -83,7 +90,7 @@ public class RecipeDetailsActivityImpl extends BaseActivityImpl implements Recip
 
         ButterKnife.bind(this);
         Gson gson = new Gson();
-        r = gson.fromJson(getIntent().getStringExtra("recipe"),Recipe.class);
+        r = gson.fromJson(getIntent().getStringExtra("recipe"), Recipe.class);
         onDetailsRetrieved(r);
 
         setUpBackActionBar(toolbar);
@@ -93,10 +100,6 @@ public class RecipeDetailsActivityImpl extends BaseActivityImpl implements Recip
 
     @Override
     public void onDetailsRetrieved(Recipe returnParam) {
-        //Fake mentre no hi hagi imatges
-
-        //List<String> fakeList = new ArrayList<>();
-        //fakeList.add("https://photos6.spartoo.es/photos/231/231523/231523_350_A.jpg");
 
         /*addCategoryButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -115,18 +118,44 @@ public class RecipeDetailsActivityImpl extends BaseActivityImpl implements Recip
         //presenter.getDesiredCategories(returnParam.getId());
     }
 
-    private void setUpProductDetails(Recipe recipe) {
+    private void setUpProductDetails(final Recipe recipe) {
         title.setText(recipe.getTitle());
         description.setText(recipe.getDescription());
         difficulty.setText(recipe.getDifficulty());
         people.setText(recipe.getPeople());
-        time.setText(recipe.getTime()+"h");
+        time.setText(recipe.getTime() + "h");
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_list_item_1, recipe.getIngredients());
 
         ingredients.setAdapter(adapter);
         //TODO: Como poner el sitio situado en el mapa
-        //place.set
+        place.onCreate(Bundle.EMPTY);
+        place.getMapAsync(new OnMapReadyCallback() {
+            @Override
+            public void onMapReady(GoogleMap googleMap) {
+                //googleMap.getUiSettings().setMyLocationButtonEnabled(false);
+                //MapsInitializer.initialize(RecipeDetailsActivityImpl.this);
+                String[] lugar = recipe.getPlace().split("\\#");
+                String[] latlong0 =  lugar[1].split(",");
+                String[] latlong1 =  latlong0[0].split("\\(");
+                String[] latlong2 =  latlong0[1].split("\\)");
+                double latitude = Double.parseDouble(latlong1[1]);
+                double longitude = Double.parseDouble(latlong2[0]);
+                LatLng ll = new LatLng(latitude,longitude);       
+                Log.i("LATLNG","LatLng: "+ll+"  Lat: "+latitude+"    Lng: "+longitude);
+                Log.i("LUGAR", "lugar: " + lugar[0]);
+                googleMap.addMarker(new MarkerOptions().position(ll).title("Marker in "+ lugar[0]));
+                googleMap.moveCamera(CameraUpdateFactory.newLatLng(ll));
+                googleMap.getUiSettings().setZoomControlsEnabled(true); //zoom
+                googleMap.getUiSettings().setCompassEnabled(true); //brujula
+                googleMap.getUiSettings().setScrollGesturesEnabled(true); //desplazarse por el mapa
+
+                //googleMap.setMinZoomPreference(6.0f);
+                //googleMap.setMaxZoomPreference(14.0f);
+            }
+        });
+        //MapsInitializer.initialize(this);
+
     }
 
     public void setUpViewPager(List<String> images) {
@@ -182,6 +211,15 @@ public class RecipeDetailsActivityImpl extends BaseActivityImpl implements Recip
         }
 
         dots[0].setImageDrawable(getResources().getDrawable(R.drawable.recipe_details_dot_selected));
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

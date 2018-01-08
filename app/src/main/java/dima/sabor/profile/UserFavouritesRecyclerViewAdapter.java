@@ -21,12 +21,12 @@ import dima.sabor.R;
 import dima.sabor.model.Recipe;
 
 
-public abstract class UserRecipesRecyclerViewAdapter extends RecyclerView.Adapter<UserRecipesRecyclerViewAdapter.ViewHolder> {
+public abstract class UserFavouritesRecyclerViewAdapter extends RecyclerView.Adapter<UserFavouritesRecyclerViewAdapter.ViewHolder> {
 
     private final Context context;
     public List<Recipe> recipe;
 
-    public UserRecipesRecyclerViewAdapter(Context context, List<Recipe> lr) {
+    public UserFavouritesRecyclerViewAdapter(Context context, List<Recipe> lr) {
         this.context = context;
         this.recipe = lr;
     }
@@ -34,12 +34,14 @@ public abstract class UserRecipesRecyclerViewAdapter extends RecyclerView.Adapte
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        View v = LayoutInflater.from(context).inflate(R.layout.my_recipes_list_item, viewGroup, false);
+        View v = LayoutInflater.from(context).inflate(R.layout.my_favourites_list_item, viewGroup, false);
         return new ViewHolder(v);
     }
 
     @Override
     public void onBindViewHolder(final ViewHolder viewHolder, final int i) {
+        //Picasso.with(context).load(recipe.get(i).getImages().get(0)).into(viewHolder.itemImage);
+        //Log.i("images","VIEW product: "+product.get(i).getId()+" images: "+ product.get(i).getImages() );
         if(recipe.get(i).getImages()!= null) {
             byte[] decodedString = Base64.decode(recipe.get(i).getImages().get(0), Base64.DEFAULT);
             Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
@@ -50,11 +52,12 @@ public abstract class UserRecipesRecyclerViewAdapter extends RecyclerView.Adapte
         viewHolder.itemDifficulty.setText("Difficulty: " + recipe.get(i).getDifficulty());
         viewHolder.itemTime.setText("Time: "+ recipe.get(i).getTime()+"h");
 
+        viewHolder.fav.setImageResource(R.mipmap.ic_filled_star);
 
-        viewHolder.delete.setOnClickListener(new View.OnClickListener() {
+        viewHolder.fav.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onDeletedClick(recipe.get(viewHolder.getAdapterPosition()));
+                onFavouriteClick(recipe.get(viewHolder.getAdapterPosition()));
             }
         });
 
@@ -73,26 +76,26 @@ public abstract class UserRecipesRecyclerViewAdapter extends RecyclerView.Adapte
     }
 
     abstract public void onItemClick(String gson);
-    abstract public void  onDeletedClick(Recipe r);
+    abstract public void  onFavouriteClick(Recipe recipe);
 
     class ViewHolder extends RecyclerView.ViewHolder{
 
         View itemView;
 
-        @BindView(R.id.user_recipe_list_image2)
+        @BindView(R.id.user_recipe_list_image3)
         public ImageView itemImage;
 
-        @BindView(R.id.user_recipe_list_title2)
+        @BindView(R.id.user_recipe_list_title3)
         public TextView itemTitle;
 
-        @BindView(R.id.user_recipe_list_difficulty2)
+        @BindView(R.id.user_recipe_list_difficulty3)
         public TextView itemDifficulty;
 
-        @BindView(R.id.user_recipe_list_time2)
+        @BindView(R.id.user_recipe_list_time3)
         public TextView itemTime;
 
-        @BindView(R.id.user_recipe_list_delete2)
-        public ImageView delete;
+        @BindView(R.id.user_recipe_list_favourite3)
+        public ImageView fav;
 
         public ViewHolder(View itemView) {
             super(itemView);

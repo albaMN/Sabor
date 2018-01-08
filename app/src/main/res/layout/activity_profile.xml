@@ -32,7 +32,7 @@
                 app:civ_border_width="2dp"
                 app:civ_fill_color="#E0E0E0" />
 
-            <ImageView
+            <!--ImageView
 
                 android:id="@+id/options"
                 android:layout_width="30dp"
@@ -43,7 +43,7 @@
                 android:background="@drawable/ic_tool2"
                 android:layout_alignTop="@+id/user_profile_avatar"
                 android:layout_alignParentEnd="true"
-                android:layout_marginEnd="18dp" />
+                android:layout_marginEnd="18dp" /-->
 
         </RelativeLayout>
 
@@ -102,15 +102,15 @@
                     android:layout_alignParentStart="true"
                     android:textStyle="bold"
                     android:textSize="16sp"
-                    android:text="E-mail"/>
+                    android:text="No. of recipes published"/>
 
                 <TextView
-                    android:id="@+id/user_profile_email"
+                    android:id="@+id/user_profile_num_recipes"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:textSize="16sp"
-                    android:text="jordi@alpou.com" />
+                    android:text="0" />
 
             </RelativeLayout>
 
@@ -142,43 +142,22 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
 
-                        <LinearLayout
-                            android:id="@+id/myrecipes"
+                        <include
+                            android:id="@+id/layoutMyRecipes"
+                            layout="@layout/list_profile"
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:orientation="vertical"
-                            >
+                            android:layout_height="wrap_content"></include>
 
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:id="@+id/favourites"
+                        <include
+                            android:id="@+id/layoutMyFavourites"
+                            layout="@layout/list_profile2"
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:orientation="vertical">
-
-                        </LinearLayout>
+                            android:layout_height="wrap_content"></include>
 
                     </FrameLayout>
                 </LinearLayout>
             </TabHost>
         </LinearLayout>
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/user_recipes_recycler_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
-
-        <!--LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <ListView
-                android:id="@+id/listviewprofile"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"></ListView>
-        </LinearLayout-->
 
     </LinearLayout>
 

@@ -1,11 +1,14 @@
 package dima.sabor.profile;
 
+import java.util.List;
+
 import javax.inject.Inject;
 
 import dima.sabor.data.InternalStorageInterface;
 import dima.sabor.data.impl.FirebaseDataSource;
 import dima.sabor.data.listener.ErrorBundle;
-import dima.sabor.data.usecase.GetRecipesUserUseCase;
+import dima.sabor.data.usecase.GetFavouritesUseCase;
+import dima.sabor.data.usecase.GetMyRecipesUseCase;
 import dima.sabor.model.Recipe;
 import dima.sabor.model.User;
 
@@ -14,17 +17,20 @@ public class ProfilePresenter {
     private ProfileActivityImpl view;
     private FirebaseDataSource firebaseservice;
     private InternalStorageInterface internalStorage;
-    private GetRecipesUserUseCase getRecipesUserUseCase;
+    private GetMyRecipesUseCase getMyRecipesUseCase;
+    private GetFavouritesUseCase getFavouritesUseCase;
 
     @Inject
     public ProfilePresenter(ProfileActivityImpl view,
                             FirebaseDataSource firebaseservice,
                             InternalStorageInterface internalStorage,
-                            GetRecipesUserUseCase getRecipesUserUseCase) {
+                            GetMyRecipesUseCase getMyRecipesUseCase,
+                            GetFavouritesUseCase getFavouritesUseCase) {
         this.view = view;
         this.firebaseservice = firebaseservice;
         this.internalStorage = internalStorage;
-        this.getRecipesUserUseCase = getRecipesUserUseCase;
+        this.getMyRecipesUseCase = getMyRecipesUseCase;
+        this.getFavouritesUseCase = getFavouritesUseCase;
     }
 
 
@@ -46,20 +52,39 @@ public class ProfilePresenter {
     }
 
     public void getMyRecipes() {
-        getRecipesUserUseCase.execute(getUser().getUid(), new GetRecipesUserUseCase.GetMyRecipesListener() {
+        getMyRecipesUseCase.execute("", new GetMyRecipesUseCase.GetMyRecipesListener() {
             @Override
             public void onError(ErrorBundle errorBundle) {
                 view.onError(errorBundle.getErrorMessage());
             }
 
             @Override
-            public void onSuccess(Recipe returnParam) {
+            public void onSuccess(List<Recipe> returnParam) {
                 view.addRecipe(returnParam);
             }
         });
     }
 
     public void getMyFavourites() {
-        //TODO: implementar
+        getFavouritesUseCase.execute("",new GetFavouritesUseCase.GetFavouritesListener() {
+            @Override
+            public void onError(ErrorBundle errorBundle) {
+                view.onError(errorBundle.getErrorMessage());
+            }
+
+            @Override
+            public void onSuccess(List<Recipe> returnParam) {
+                view.addFavourites(returnParam);
+            }
+        });
     }
+
+    public void deleteFav(String RecipeID) {
+        firebaseservice.deleteFav(internalStorage.getUser().getUid(), RecipeID);
+    }
+
+    public void deleteRecipe(Recipe recipe) {
+        firebaseservice.deleteRecipe(internalStorage.getUser().getUid(), recipe.getId());
+    }
+
 }

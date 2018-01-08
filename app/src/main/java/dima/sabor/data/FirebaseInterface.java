@@ -32,9 +32,10 @@ public interface FirebaseInterface {
     Task<AuthResult> getAuthWithGoogle(final BaseActivityImpl activity, GoogleSignInAccount acct);
     void signOut(String provider);
     String addRecipe(Recipe recipe);
-    void getMyRecipes(String userID, FirebaseRecipeListener dataCallback);
+    void getMyRecipes(String userID, FirebaseFavsListener dataCallback);
     void getRecipes(FirebaseRecipeListener dataCallback);
     void isFav(String userID, FirebaseFavsListener dataCallback);
     void deleteFav(String userID, String recipeID);
     void addFav(String userID,Recipe recipe);
+    void deleteRecipe(String userID, String recipeID);
 }
