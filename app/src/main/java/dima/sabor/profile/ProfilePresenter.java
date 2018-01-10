@@ -49,6 +49,8 @@ public class ProfilePresenter {
 
     public void updateImageUser(User user, String imageEncoded) {
         firebaseservice.updateImageUser(user, imageEncoded);
+        user.setPhoto_url(imageEncoded);
+        internalStorage.saveUser(user);
     }
 
     public void getMyRecipes() {

@@ -63,7 +63,6 @@ public class ProfileActivityImpl extends MenuActivityImpl implements ProfileActi
     private static final int MY_PERMISSIONS = 3;
     private User user;
 
-    private String profileimage;
     private String nPath;
 
     private List<Recipe> mylistrecipes;
@@ -280,7 +279,6 @@ public class ProfileActivityImpl extends MenuActivityImpl implements ProfileActi
         hideProgress();
         this.user = user;
         userName.setText(user.getUsername());
-        //userNumRec.setText(user.getEmail());
         if(user.getPhoto_url() != "") {
             if (!user.getPhoto_url().contains("http")) {
                 try {
@@ -289,8 +287,7 @@ public class ProfileActivityImpl extends MenuActivityImpl implements ProfileActi
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-            } else {
-
+           } else {
                 Picasso.with(this).load(user.getPhoto_url()).into(userAvatar);
             }
         }
@@ -440,7 +437,7 @@ public class ProfileActivityImpl extends MenuActivityImpl implements ProfileActi
             Bundle extras = data.getExtras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");
             userAvatar.setImageBitmap(imageBitmap);
-            profileimage = BitMapToString(imageBitmap);
+            String profileimage = BitMapToString(imageBitmap);
             user.setPhoto_url(profileimage);
             presenter.updateImageUser(user, profileimage);
         }
@@ -449,9 +446,10 @@ public class ProfileActivityImpl extends MenuActivityImpl implements ProfileActi
             if (null != selectedImageUri) {
                 nPath = getPathFromURI(selectedImageUri);
                 Bitmap bm = BitmapFactory.decodeFile(nPath);
-                profileimage = BitMapToString(bm);
+                String profileimage = BitMapToString(bm);
                 userAvatar.setImageURI(selectedImageUri);
                 user.setPhoto_url(profileimage);
+                Log.i("IMAGE2","image: "+profileimage);
                 presenter.updateImageUser(user, profileimage);
             }
         }
