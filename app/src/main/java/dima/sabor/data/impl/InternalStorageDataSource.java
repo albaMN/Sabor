@@ -9,13 +9,15 @@ import javax.inject.Inject;
 
 import dima.sabor.data.InternalStorageInterface;
 import dima.sabor.dependencyinjection.annotation.qualifier.ForApp;
+import dima.sabor.model.Recipe;
 import dima.sabor.model.User;
 
 public class InternalStorageDataSource implements InternalStorageInterface {
 
     private static final String USER_TOKEN = "user_token";
     private static final String USER = "user";
-    private static final String RECEIPT = "recipe";
+    private static final String RECEIPT = "receipt";
+    private static final String RECIPE = "recipe";
 
     SharedPreferences internalStorage;
 
@@ -74,5 +76,21 @@ public class InternalStorageDataSource implements InternalStorageInterface {
     public String getReceiptId() {
         String receiptId = internalStorage.getString(RECEIPT, "0");
         return receiptId;
+    }
+
+    @Override
+    public void saveActualRecipe(String Gsonrecipe) {
+        internalStorage.edit().putString(RECIPE, Gsonrecipe).commit();
+    }
+
+    @Override
+    public Recipe getActualRecipe() {
+        Gson gson = new Gson();
+        String recipeJson = internalStorage.getString(RECIPE, null);
+        if (recipeJson != null) {
+            Recipe recipe = gson.fromJson(recipeJson, Recipe.class);
+            return recipe;
+        }
+        return null;
     }
 }

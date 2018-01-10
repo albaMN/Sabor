@@ -6,10 +6,10 @@
             android:title="Recipes"
             android:icon="@mipmap/inbox_icon"/>
 
-        <item
+        <!--item
             android:id="@+id/menu_chat"
             android:title="Messages"
-            android:icon="@mipmap/message_icon"/>
+            android:icon="@mipmap/message_icon"/-->
     </group>
 
     <group>

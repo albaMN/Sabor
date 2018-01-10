@@ -125,7 +125,7 @@ public class MenuActivityImpl extends BaseActivityImpl implements MenuActivity {
                         finish();
                         return true;
 
-                    case R.id.menu_chat:
+                    //case R.id.menu_chat:
                         //startActivity(new Intent(MenuActivityImpl.this, ChatListActivityImpl.class));
                         //return true;
 

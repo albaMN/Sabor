@@ -75,4 +75,12 @@ public class ShowRecipesPresenter {
     public void addFav(Recipe recipe) {
         firebaseservice.addFav(internalstorage.getUser().getUid(), recipe);
     }
+
+    public String getUserID() {
+        return internalstorage.getUser().getUid();
+    }
+
+    public void saveRecInternalSt(String gsonRecipe) {
+        internalstorage.saveActualRecipe(gsonRecipe);
+    }
 }

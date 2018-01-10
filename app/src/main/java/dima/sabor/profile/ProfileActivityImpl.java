@@ -49,6 +49,7 @@ import dima.sabor.dependencyinjection.view.ViewModule;
 import dima.sabor.menu.MenuActivityImpl;
 import dima.sabor.model.Recipe;
 import dima.sabor.model.User;
+import dima.sabor.recipeDetails.MyRecipeDetailsActivityImpl;
 import dima.sabor.recipeDetails.RecipeDetailsActivityImpl;
 
 import static android.Manifest.permission.CAMERA;
@@ -198,9 +199,10 @@ public class ProfileActivityImpl extends MenuActivityImpl implements ProfileActi
         adapter1 = new UserRecipesRecyclerViewAdapter(this, recipes) {
             @Override
             public void onItemClick(String gson) {
-               // Intent intent = new Intent(ProfileActivityImpl.this, UserProductDetailsActivityImpl.class);
-                //intent.putExtra("recipe", gson);
-                //startActivity(intent);
+                presenter.saveRecInternalSt(gson);
+                Intent intent = new Intent(ProfileActivityImpl.this, MyRecipeDetailsActivityImpl.class);
+                intent.putExtra("activity","mine");
+                startActivity(intent);
             }
 
             @Override
@@ -237,8 +239,8 @@ public class ProfileActivityImpl extends MenuActivityImpl implements ProfileActi
        adapter2 = new UserFavouritesRecyclerViewAdapter(this, recipes) {
             @Override
             public void onItemClick(String gson) {
+                presenter.saveRecInternalSt(gson);
                 Intent intent = new Intent(ProfileActivityImpl.this, RecipeDetailsActivityImpl.class);
-                intent.putExtra("recipe", gson);
                 startActivity(intent);
             }
 

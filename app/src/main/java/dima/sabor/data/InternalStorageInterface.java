@@ -1,5 +1,6 @@
 package dima.sabor.data;
 
+import dima.sabor.model.Recipe;
 import dima.sabor.model.User;
 
 public interface InternalStorageInterface {
@@ -19,5 +20,9 @@ public interface InternalStorageInterface {
     void saveReceiptId (String id);
 
     String getReceiptId();
+
+    void saveActualRecipe(String GsonRecipe);
+
+    Recipe getActualRecipe();
 
 }

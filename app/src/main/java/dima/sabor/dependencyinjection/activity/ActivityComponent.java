@@ -9,6 +9,7 @@ import dima.sabor.login.SignInActivityImpl;
 import dima.sabor.menu.MenuActivityImpl;
 import dima.sabor.profile.OptionsProfileActivityImpl;
 import dima.sabor.profile.ProfileActivityImpl;
+import dima.sabor.recipeDetails.MyRecipeDetailsActivityImpl;
 import dima.sabor.recipeDetails.RecipeDetailsActivityImpl;
 import dima.sabor.recipesList.RecipesListActivityImpl;
 import dima.sabor.splash.SplashActivityImpl;
@@ -35,4 +36,6 @@ public interface ActivityComponent {
     void inject(ProfileActivityImpl activity);
 
     void inject(RecipeDetailsActivityImpl activity);
+
+    void inject(MyRecipeDetailsActivityImpl activity);
 }

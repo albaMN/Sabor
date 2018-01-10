@@ -24,6 +24,7 @@ import dima.sabor.dependencyinjection.activity.ActivityModule;
 import dima.sabor.dependencyinjection.view.ViewModule;
 import dima.sabor.menu.MenuActivityImpl;
 import dima.sabor.model.Recipe;
+import dima.sabor.recipeDetails.MyRecipeDetailsActivityImpl;
 import dima.sabor.recipeDetails.RecipeDetailsActivityImpl;
 
 public class RecipesListActivityImpl extends MenuActivityImpl implements RecipesListActivity {
@@ -86,10 +87,18 @@ public class RecipesListActivityImpl extends MenuActivityImpl implements Recipes
 
         adapter = new RecipesRecyclerViewAdapter(this, recipes) {
             @Override
-            public void onItemClick(String gson) {
-                Intent intent = new Intent(RecipesListActivityImpl.this, RecipeDetailsActivityImpl.class);
-                intent.putExtra("recipe", gson);
-                startActivity(intent);
+            public void onItemClick(String gson, String userId) {
+                if(userId.equals(presenter.getUserID())) {
+                    presenter.saveRecInternalSt(gson);
+                    Intent intent = new Intent(RecipesListActivityImpl.this, MyRecipeDetailsActivityImpl.class);
+                    intent.putExtra("activity","all");
+                    startActivity(intent);
+                }
+                else {
+                    presenter.saveRecInternalSt(gson);
+                    Intent intent = new Intent(RecipesListActivityImpl.this, RecipeDetailsActivityImpl.class);
+                    startActivity(intent);
+               }
             }
 
             @Override

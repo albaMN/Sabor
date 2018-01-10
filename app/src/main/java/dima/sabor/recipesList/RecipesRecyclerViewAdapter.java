@@ -79,7 +79,7 @@ public abstract class RecipesRecyclerViewAdapter extends RecyclerView.Adapter<Re
             @Override public void onClick(View v) {
             Gson gson= new Gson();
             String json = gson.toJson(recipe.get(viewHolder.getAdapterPosition()));
-            onItemClick(json);
+            onItemClick(json, recipe.get(i).getUserId());
             }
         });
     }
@@ -89,7 +89,7 @@ public abstract class RecipesRecyclerViewAdapter extends RecyclerView.Adapter<Re
         return recipe.size();
     }
 
-    abstract public void onItemClick(String gson);
+    abstract public void onItemClick(String gson, String recipeUserId);
     abstract public void  onFavouriteClick(Recipe recipe, boolean add);
     abstract public boolean isFav(String RecipeID);
 

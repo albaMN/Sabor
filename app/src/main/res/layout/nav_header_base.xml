@@ -7,7 +7,7 @@
 
     <RelativeLayout
         android:id="@+id/navigation_drawer_account_section"
-        android:background="@color/colorPrimary"
+        android:background="@color/colorGrey"
         android:gravity="bottom"
         android:orientation="vertical"
         android:paddingBottom="8dp"

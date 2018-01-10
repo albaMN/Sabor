@@ -87,4 +87,8 @@ public class ProfilePresenter {
         firebaseservice.deleteRecipe(internalStorage.getUser().getUid(), recipe.getId());
     }
 
+    public void saveRecInternalSt(String gsonRecipe) {
+        internalStorage.saveActualRecipe(gsonRecipe);
+    }
+
 }

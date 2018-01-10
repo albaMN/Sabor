@@ -1,13 +1,16 @@
 package dima.sabor.recipeDetails;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.util.Base64;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
@@ -35,9 +38,10 @@ import dima.sabor.dependencyinjection.App;
 import dima.sabor.dependencyinjection.activity.ActivityModule;
 import dima.sabor.dependencyinjection.view.ViewModule;
 import dima.sabor.model.Recipe;
+import dima.sabor.profile.ProfileActivityImpl;
 import dima.sabor.recipesList.RecipesListActivityImpl;
 
-public class RecipeDetailsActivityImpl extends BaseActivityImpl implements RecipeDetailsActivity {
+public class MyRecipeDetailsActivityImpl extends BaseActivityImpl implements RecipeDetailsActivity {
     @BindView(R.id.recipe_detail_title)
     TextView title;
 
@@ -69,12 +73,13 @@ public class RecipeDetailsActivityImpl extends BaseActivityImpl implements Recip
     LinearLayout dotsLayout;
 
     @Inject
-    RecipeDetailsPresenter presenter;
+    MyRecipeDetailsPresenter presenter;
 
     ImageViewPageAdapter viewPageAdapter;
     int numImages;
     ImageView[] dots;
     Recipe r;
+    String activ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,10 +93,12 @@ public class RecipeDetailsActivityImpl extends BaseActivityImpl implements Recip
                 .inject(this);
 
         ButterKnife.bind(this);
-        r = presenter.getActualRecipe();
+        r = presenter.getMyActualRecipe();
+        activ = getIntent().getExtras().getString("activity");
         onDetailsRetrieved(r);
 
         setUpBackActionBar(toolbar);
+
     }
 
     @Override
@@ -196,11 +203,43 @@ public class RecipeDetailsActivityImpl extends BaseActivityImpl implements Recip
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.recipe_details_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
             finish();
             return true;
         }
+
+        else if(item.getItemId() == R.id.menu_delete_recipe) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+            builder.setMessage("Are you sure you want to delete this recipe permanently?")
+                    .setTitle("Confirmation")
+                    .setPositiveButton("Accept", new DialogInterface.OnClickListener()  {
+                        @Override
+                        public void onClick(DialogInterface dialog, int id) {
+                            Log.i("Dialogs", "Accepted confirmation.");
+                            presenter.deleteRecipe(r, activ);
+                            dialog.cancel();
+                        }
+                    })
+                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int id) {
+                            Log.i("Dialogs", "Denied confirmation.");
+                            dialog.cancel();
+                        }
+                    });
+
+            builder.create().show();
+            return true;
+        }
+
         return super.onOptionsItemSelected(item);
     }
 
@@ -211,6 +250,11 @@ public class RecipeDetailsActivityImpl extends BaseActivityImpl implements Recip
 
     public void goToShowRecipesList(){
         startActivity(new Intent(this, RecipesListActivityImpl.class));
+        finish();
+    }
+
+    public void goToShowMyRecipesList(){
+        startActivity(new Intent(this, ProfileActivityImpl.class));
         finish();
     }
 }
