@@ -52,17 +52,24 @@ public abstract class RecipesRecyclerViewAdapter extends RecyclerView.Adapter<Re
         viewHolder.itemDifficulty.setText("Difficulty: " + recipe.get(i).getDifficulty());
         viewHolder.itemTime.setText("Time: "+ recipe.get(i).getTime()+"h");
 
-        if (isFav(recipe.get(viewHolder.getAdapterPosition()).getId())) {
-            viewHolder.fav.setImageResource(R.mipmap.ic_filled_star);
-        } else {
-            viewHolder.fav.setImageResource(R.mipmap.ic_non_filled_star);
+        //If the recipe it's not mine, I cannot add this recipe to my favourites
+        if (itsmine(recipe.get(i).getUserId())) {
+            viewHolder.fav.setFocusable(false);
+            viewHolder.fav.setVisibility(View.INVISIBLE);
         }
+        else {
 
+            if (isFav(recipe.get(viewHolder.getAdapterPosition()).getId())) {
+                viewHolder.fav.setImageResource(R.mipmap.ic_filled_star);
+            } else {
+                viewHolder.fav.setImageResource(R.mipmap.ic_non_filled_star);
+            }
+
+        }
        viewHolder.fav.setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View v) {
                boolean add = true;
-               //TODO: Mirar que la receta no sea mia, si no es mia que directamente no aparezca la imagen
                if(isFav(recipe.get(viewHolder.getAdapterPosition()).getId())) {
                    viewHolder.fav.setImageResource(R.mipmap.ic_non_filled_star);
                    add = false;
@@ -92,6 +99,7 @@ public abstract class RecipesRecyclerViewAdapter extends RecyclerView.Adapter<Re
     abstract public void onItemClick(String gson, String recipeUserId);
     abstract public void  onFavouriteClick(Recipe recipe, boolean add);
     abstract public boolean isFav(String RecipeID);
+    abstract public boolean itsmine(String RecipeUserID);
 
     class ViewHolder extends RecyclerView.ViewHolder{
 

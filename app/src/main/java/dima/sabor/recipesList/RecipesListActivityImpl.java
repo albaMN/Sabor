@@ -121,6 +121,12 @@ public class RecipesListActivityImpl extends MenuActivityImpl implements Recipes
                 else return false;
             }
 
+            @Override
+            public boolean itsmine(String RecipeUserID) {
+                if(RecipeUserID.equals(presenter.getUserID())) return true;
+                return false;
+            }
+
         };
 
         recyclerViewRecipes.setAdapter(adapter);
