@@ -27,7 +27,9 @@ import android.widget.Toast;
 
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.location.places.AutocompleteFilter;
 import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 import com.google.android.gms.location.places.ui.PlacePicker;
 
 import java.io.ByteArrayOutputStream;
@@ -212,7 +214,14 @@ public class AddRecipeActivityImpl extends BaseActivityImpl implements AddRecipe
 
 
         private void placeIntent() {
-            PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
+            //PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
+            //mAutocompleteFragment.setFilter(autocompleteFilter);
+
+            AutocompleteFilter autocompleteFilter = new AutocompleteFilter.Builder()
+                    .setTypeFilter(Place.TYPE_CITY_HALL)
+                    .build();
+            PlaceAutocomplete.IntentBuilder builder = new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_FULLSCREEN)
+                    .setFilter(autocompleteFilter);
             try {
                 startActivityForResult(builder.build(this), PLACE_PICKER_REQUEST);
             } catch (GooglePlayServicesRepairableException e) {
@@ -437,10 +446,8 @@ public class AddRecipeActivityImpl extends BaseActivityImpl implements AddRecipe
 
         public void goToShowProductList(){
             hideProgress();
-            /*Toast.makeText(getApplicationContext(),
-                "Producto añadido correctamente", Toast.LENGTH_LONG).show();*/
-            /*TODO: te rediccionara al perfil del usuario que alli es donde se carga, o se puede ir al general
-            y que haga como instagram que se vea como carga el producto?? */
+            Toast.makeText(getApplicationContext(),
+                "Recipe added correctly", Toast.LENGTH_LONG).show();
             startActivity(new Intent(this, ProfileActivityImpl.class));
             finish();
         }

@@ -38,6 +38,7 @@ import dima.sabor.model.Recipe;
 import dima.sabor.recipesList.RecipesListActivityImpl;
 
 public class RecipeDetailsActivityImpl extends BaseActivityImpl implements RecipeDetailsActivity {
+    private static final String TAG = "MapView";
     @BindView(R.id.recipe_detail_title)
     TextView title;
 
@@ -110,33 +111,27 @@ public class RecipeDetailsActivityImpl extends BaseActivityImpl implements Recip
                 android.R.layout.simple_list_item_1, recipe.getIngredients());
 
         ingredients.setAdapter(adapter);
-        //TODO: Como poner el sitio situado en el mapa
+
+
         place.onCreate(Bundle.EMPTY);
         place.getMapAsync(new OnMapReadyCallback() {
             @Override
             public void onMapReady(GoogleMap googleMap) {
-                //googleMap.getUiSettings().setMyLocationButtonEnabled(false);
-                //MapsInitializer.initialize(RecipeDetailsActivityImpl.this);
                 String[] lugar = recipe.getPlace().split("\\#");
                 String[] latlong0 =  lugar[1].split(",");
                 String[] latlong1 =  latlong0[0].split("\\(");
                 String[] latlong2 =  latlong0[1].split("\\)");
                 double latitude = Double.parseDouble(latlong1[1]);
                 double longitude = Double.parseDouble(latlong2[0]);
-                LatLng ll = new LatLng(latitude,longitude);       
+                LatLng ll = new LatLng(latitude,longitude);
                 Log.i("LATLNG","LatLng: "+ll+"  Lat: "+latitude+"    Lng: "+longitude);
                 Log.i("LUGAR", "lugar: " + lugar[0]);
                 googleMap.addMarker(new MarkerOptions().position(ll).title("Marker in "+ lugar[0]));
                 googleMap.moveCamera(CameraUpdateFactory.newLatLng(ll));
                 googleMap.getUiSettings().setZoomControlsEnabled(true); //zoom
                 googleMap.getUiSettings().setCompassEnabled(true); //brujula
-                googleMap.getUiSettings().setScrollGesturesEnabled(true); //desplazarse por el mapa
-
-                //googleMap.setMinZoomPreference(6.0f);
-                //googleMap.setMaxZoomPreference(14.0f);
             }
         });
-        //MapsInitializer.initialize(this);
 
     }
 
@@ -212,5 +207,50 @@ public class RecipeDetailsActivityImpl extends BaseActivityImpl implements Recip
     public void goToShowRecipesList(){
         startActivity(new Intent(this, RecipesListActivityImpl.class));
         finish();
+    }
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (place != null) {
+            place.onResume();
+        }
+    }
+
+    @Override
+    public void onPause() {
+        if (place != null) {
+            place.onPause();
+        }
+        super.onPause();
+    }
+
+    @Override
+    public void onDestroy() {
+        if (place != null) {
+            try {
+                place.onDestroy();
+            } catch (NullPointerException e) {
+                Log.e(TAG, "Error while attempting MapView.onDestroy(), ignoring exception", e);
+            }
+        }
+        super.onDestroy();
+    }
+
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+        if (place != null) {
+            place.onLowMemory();
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (place != null) {
+            place.onSaveInstanceState(outState);
+        }
     }
 }

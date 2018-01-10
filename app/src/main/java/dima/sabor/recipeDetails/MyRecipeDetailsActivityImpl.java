@@ -42,6 +42,7 @@ import dima.sabor.profile.ProfileActivityImpl;
 import dima.sabor.recipesList.RecipesListActivityImpl;
 
 public class MyRecipeDetailsActivityImpl extends BaseActivityImpl implements RecipeDetailsActivity {
+    private static final String TAG = "MapView";
     @BindView(R.id.recipe_detail_title)
     TextView title;
 
@@ -117,13 +118,11 @@ public class MyRecipeDetailsActivityImpl extends BaseActivityImpl implements Rec
                 android.R.layout.simple_list_item_1, recipe.getIngredients());
 
         ingredients.setAdapter(adapter);
-        //TODO: Como poner el sitio situado en el mapa
+
         place.onCreate(Bundle.EMPTY);
         place.getMapAsync(new OnMapReadyCallback() {
             @Override
             public void onMapReady(GoogleMap googleMap) {
-                //googleMap.getUiSettings().setMyLocationButtonEnabled(false);
-                //MapsInitializer.initialize(RecipeDetailsActivityImpl.this);
                 String[] lugar = recipe.getPlace().split("\\#");
                 String[] latlong0 =  lugar[1].split(",");
                 String[] latlong1 =  latlong0[0].split("\\(");
@@ -137,13 +136,8 @@ public class MyRecipeDetailsActivityImpl extends BaseActivityImpl implements Rec
                 googleMap.moveCamera(CameraUpdateFactory.newLatLng(ll));
                 googleMap.getUiSettings().setZoomControlsEnabled(true); //zoom
                 googleMap.getUiSettings().setCompassEnabled(true); //brujula
-                googleMap.getUiSettings().setScrollGesturesEnabled(true); //desplazarse por el mapa
-
-                //googleMap.setMinZoomPreference(6.0f);
-                //googleMap.setMaxZoomPreference(14.0f);
             }
         });
-        //MapsInitializer.initialize(this);
 
     }
 
@@ -256,5 +250,50 @@ public class MyRecipeDetailsActivityImpl extends BaseActivityImpl implements Rec
     public void goToShowMyRecipesList(){
         startActivity(new Intent(this, ProfileActivityImpl.class));
         finish();
+    }
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (place != null) {
+            place.onResume();
+        }
+    }
+
+    @Override
+    public void onPause() {
+        if (place != null) {
+            place.onPause();
+        }
+        super.onPause();
+    }
+
+    @Override
+    public void onDestroy() {
+        if (place != null) {
+            try {
+                place.onDestroy();
+            } catch (NullPointerException e) {
+                Log.e(TAG, "Error while attempting MapView.onDestroy(), ignoring exception", e);
+            }
+        }
+        super.onDestroy();
+    }
+
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+        if (place != null) {
+            place.onLowMemory();
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (place != null) {
+            place.onSaveInstanceState(outState);
+        }
     }
 }

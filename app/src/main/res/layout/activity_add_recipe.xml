@@ -51,7 +51,7 @@
                 android:scaleType="fitCenter"
                 android:background="@null"
                 android:layout_alignParentEnd="true"
-                android:src="@mipmap/send_icon"/>
+                android:src="@mipmap/send1_icon"/>
 
         </RelativeLayout>
 
@@ -131,7 +131,7 @@
                     <EditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Place"
+                        android:hint="Place (city or country)"
                         android:id="@+id/place"
                         android:focusableInTouchMode="false"/>
 
@@ -143,7 +143,7 @@
                     android:orientation="horizontal">
 
                     <android.support.design.widget.TextInputLayout
-                        android:layout_width="275dp"
+                        android:layout_width="266dp"
                         android:layout_height="wrap_content"
                         app:hintTextAppearance="@style/AddProductTextInputLayoutAppearance">
 
@@ -157,8 +157,11 @@
 
                     <Button
                         android:id="@+id/addIngredient"
-                        android:layout_width="62dp"
+                        android:layout_width="57dp"
                         android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginTop="6dp"
+                        android:background="@drawable/chip_background"
                         android:text="Add" />
 
                 </LinearLayout>
