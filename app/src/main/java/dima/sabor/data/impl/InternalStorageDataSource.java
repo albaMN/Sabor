@@ -3,6 +3,7 @@ package dima.sabor.data.impl;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.facebook.AccessToken;
 import com.google.gson.Gson;
 
 import javax.inject.Inject;
@@ -34,8 +35,8 @@ public class InternalStorageDataSource implements InternalStorageInterface {
     }
 
     @Override
-    public void saveToken(String token) {
-        internalStorage.edit().putString(USER_TOKEN, token).apply();
+    public void saveToken(AccessToken token) {
+        internalStorage.edit().putString(USER_TOKEN, String.valueOf(token)).apply();
     }
 
     @Override

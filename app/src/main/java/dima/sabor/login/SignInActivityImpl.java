@@ -26,7 +26,7 @@ import dima.sabor.dependencyinjection.view.ViewModule;
 import dima.sabor.model.User;
 import dima.sabor.recipesList.RecipesListActivityImpl;
 
-public class SignInActivityImpl extends BaseActivityImpl implements SignInActivity {
+public  class SignInActivityImpl extends BaseActivityImpl implements SignInActivity {
 
     public static final int REQUEST_SIGN_GOOGLE = 9001;
     private GoogleApiClient mGoogleApiClient;
@@ -90,7 +90,7 @@ public class SignInActivityImpl extends BaseActivityImpl implements SignInActivi
     }
 
     public void onRegisterPressed(String email, String password, String username) {
-        user = new User("", username, email, "", "", "");
+        user = new User("-1", username, email, "password", "", "");
         presenter.register(email, password, user);
     }
 
@@ -157,7 +157,7 @@ public class SignInActivityImpl extends BaseActivityImpl implements SignInActivi
         addAlertDialog.show();
     }
 
-    @Override
+    /*@Override
     public void onStop() {
         super.onStop();
         if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
@@ -171,6 +171,6 @@ public class SignInActivityImpl extends BaseActivityImpl implements SignInActivi
         super.onStart();
         if (mGoogleApiClient != null)
             mGoogleApiClient.connect();
-    }
+    }*/
 
 }

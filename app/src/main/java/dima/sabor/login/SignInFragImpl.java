@@ -24,10 +24,10 @@ public class SignInFragImpl extends Fragment implements View.OnClickListener {
     TextView signin;
     @BindView(R.id.fbButt)
     ImageView fb;
-    @BindView(R.id.googleButt)
-    ImageView googl;
-    @BindView(R.id.account)
-    TextView account;
+    /*@BindView(R.id.googleButt)
+    ImageView googl;*/
+    /*@BindView(R.id.account)
+    TextView account;*/
     @BindView(R.id.email)
     EditText email;
     @BindView(R.id.password)
@@ -43,9 +43,8 @@ public class SignInFragImpl extends Fragment implements View.OnClickListener {
         ButterKnife.bind(this, rootView);
 
         buttonsignin.setOnClickListener(this);
-        signup.setOnClickListener(this);
         fb.setOnClickListener(this);
-        googl.setOnClickListener(this);
+        signup.setOnClickListener(this);
 
         return rootView;
     }
@@ -71,9 +70,9 @@ public class SignInFragImpl extends Fragment implements View.OnClickListener {
             case R.id.fbButt:
                 ((SignInActivityImpl) getActivity()).onFacebookPressed();
                 break;
-            case R.id.googleButt:
+          /*  case R.id.googleButt:
                 ((SignInActivityImpl) getActivity()).onGooglePressed();
-                break;
+                break;*/
 
         }
     }

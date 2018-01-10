@@ -74,12 +74,21 @@ public class FirebaseDataSource implements FirebaseInterface {
     //USER FIREBASE
 
     @Override
-    public void createUser(User user) {
-        if(user.getPhoto_url() == null) {
-            user.setPhoto_url("NOT");
+    public String createUser(User user) {
+        if(Integer.parseInt(user.getUid()) == -1) {
+            DatabaseReference pushedPostRef = databaseRef.child("users").push();
+            String userId = pushedPostRef.getKey();
+            user.setUid(userId);
+            pushedPostRef.setValue(user);
+            databaseRef.child("users").child(user.getUid()).setValue(user);
+            databaseRef.child("usernames").child(user.getUsername()).setValue(user);
+            return userId;
         }
-        databaseRef.child("users").child(user.getUid()).setValue(user);
-        databaseRef.child("usernames").child(user.getUsername()).setValue(user);
+        else {
+            databaseRef.child("users").child(user.getUid()).setValue(user);
+            databaseRef.child("usernames").child(user.getUsername()).setValue(user);
+            return user.getUid();
+        }
     }
 
     @Override

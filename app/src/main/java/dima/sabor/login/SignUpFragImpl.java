@@ -23,8 +23,8 @@ public class SignUpFragImpl extends Fragment implements View.OnClickListener {
     TextView signup;
     @BindView(R.id.signin)
     TextView signin;
-    @BindView(R.id.fb)
-    TextView fb;
+    /*@BindView(R.id.fb)
+    TextView fb;*/
     @BindView(R.id.register_button)
     MyRegulerText account;
     @BindView(R.id.reg_email)
@@ -50,13 +50,7 @@ public class SignUpFragImpl extends Fragment implements View.OnClickListener {
 
         signin.setOnClickListener(this);
         account.setOnClickListener(this);
-/*
-        signin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ((SignInActivityImpl) getActivity()).openLoginFragment();
-            }
-        });*/
+
         return view;
     }
 

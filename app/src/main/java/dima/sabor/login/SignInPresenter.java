@@ -172,20 +172,17 @@ public class SignInPresenter {
                     view.hideProgress();
                     processLogin(task.getResult().getUser(), task.getResult().getUser().getProviderData().get(1));
                     createUser(user);
-                    view.registerSuccess();
+                    //view.registerSuccess();
                 } else {
                     Log.w(TAG, "createUserWithEmail:failure", task.getException());
                     view.hideProgress();
                     view.showRegisterFail();
-                    Toast.makeText(view, "Authentication failed. This ",
-                            Toast.LENGTH_SHORT).show();
                 }
             }
         });
     }
 
     public void createUser(final User user) {
-        //internalStorage.saveUser(user);
         final String username = user.getUsername();
         firebaseservice.getUserByUsername(username).addListenerForSingleValueEvent(
                 new ValueEventListener() {
@@ -195,7 +192,9 @@ public class SignInPresenter {
                         if(!exists) {
                             view.hideProgress();
                             user.setUsername(username);
-                            firebaseservice.createUser(user);
+                            Log.i("CREATE","userid: "+user.getUid());
+                            String s = firebaseservice.createUser(user);
+                            user.setUid(s);
                             internalStorage.saveUser(user);
                             view.changeActivity();
                         } else {
@@ -207,8 +206,6 @@ public class SignInPresenter {
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
                        // view.hideProgress();
-                        //TODO: hacer que si se logea con google o facebook pida username
-                        view.showInsertUsername(user);
                     }
                 }
         );
@@ -227,8 +224,6 @@ public class SignInPresenter {
                             internalStorage.saveUser(remoteUser);
                             view.changeActivity();
                             //view.showLoginSuccess(remoteUser);
-                            //TODO: seguro que es esto??
-
                         }
                     }
 
@@ -239,5 +234,4 @@ public class SignInPresenter {
                 }
         );
     }
-
 }

@@ -16,7 +16,7 @@ import dima.sabor.model.Recipe;
 import dima.sabor.model.User;
 
 public interface FirebaseInterface {
-    void createUser(User user);
+    String createUser(User user);
     DatabaseReference getUser(String userUid);
     DatabaseReference getUserByUsername(String username);
     void updateImageUser(User user, String imageEncoded);
