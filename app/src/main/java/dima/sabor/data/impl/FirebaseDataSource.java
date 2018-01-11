@@ -75,7 +75,13 @@ public class FirebaseDataSource implements FirebaseInterface {
 
     @Override
     public String createUser(User user) {
-        if(Integer.parseInt(user.getUid()) == -1) {
+        int op1;
+        try {
+            op1 = Integer.parseInt(user.getUid());
+        } catch (NumberFormatException e) {
+            op1 = 0;
+        }
+        if(op1 == -1) {
             DatabaseReference pushedPostRef = databaseRef.child("users").push();
             String userId = pushedPostRef.getKey();
             user.setUid(userId);
@@ -354,7 +360,7 @@ public class FirebaseDataSource implements FirebaseInterface {
 
             @Override
             public void onCancelled(final DatabaseError databaseError) {
-                Log.e(TAGLOG, "Error!", databaseError.toException());
+                // Log.e(TAGLOG, "Error!", databaseError.toException());
                 dataCallback.onError(new ErrorBundle() {
                     @Override
                     public Exception getException() {
@@ -388,7 +394,7 @@ public class FirebaseDataSource implements FirebaseInterface {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Log.e("ISfav", "onCancelled", databaseError.toException());
+                //Log.e("ISfav", "onCancelled", databaseError.toException());
             }
         };
 
