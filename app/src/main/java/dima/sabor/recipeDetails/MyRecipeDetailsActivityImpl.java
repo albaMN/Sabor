@@ -41,7 +41,7 @@ import dima.sabor.model.Recipe;
 import dima.sabor.profile.ProfileActivityImpl;
 import dima.sabor.recipesList.RecipesListActivityImpl;
 
-public class MyRecipeDetailsActivityImpl extends BaseActivityImpl implements RecipeDetailsActivity {
+public class MyRecipeDetailsActivityImpl extends BaseActivityImpl implements MyRecipeDetailsActivity {
     private static final String TAG = "MapView";
     @BindView(R.id.recipe_detail_title)
     TextView title;

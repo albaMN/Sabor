@@ -1,4 +1,7 @@
 package dima.sabor.addRecipe;
 
-public interface AddRecipeActivity {
+import dima.sabor.base.BaseActivity;
+
+public interface AddRecipeActivity extends BaseActivity {
+    void goToShowRecipeList();
 }

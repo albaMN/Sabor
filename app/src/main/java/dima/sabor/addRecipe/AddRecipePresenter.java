@@ -29,7 +29,7 @@ public class AddRecipePresenter {
         view.showProgress("Creating recipe...");
         String rid = firebaseservice.addRecipe(recipe);
         internalStorage.saveReceiptId(rid);
-        view.goToShowProductList();
+        view.goToShowRecipeList();
     }
 
 

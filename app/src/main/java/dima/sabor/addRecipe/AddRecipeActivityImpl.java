@@ -444,7 +444,7 @@ public class AddRecipeActivityImpl extends BaseActivityImpl implements AddRecipe
             }
         }
 
-        public void goToShowProductList(){
+        public void goToShowRecipeList(){
             hideProgress();
             Toast.makeText(getApplicationContext(),
                 "Recipe added correctly", Toast.LENGTH_LONG).show();

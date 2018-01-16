@@ -26,7 +26,7 @@ import dima.sabor.login.SignInActivityImpl;
 import dima.sabor.model.User;
 import dima.sabor.utils.FormatChecker;
 
-public class OptionsProfileActivityImpl extends BaseActivityImpl implements ProfileActivity {
+public class OptionsProfileActivityImpl extends BaseActivityImpl implements OptionsProfileActivity {
 
     private User user;
 
