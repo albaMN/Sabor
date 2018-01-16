@@ -20,7 +20,6 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GoogleAuthProvider;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -28,18 +27,14 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.inject.Inject;
 
 import dima.sabor.R;
 import dima.sabor.base.BaseActivityImpl;
 import dima.sabor.data.FirebaseInterface;
-import dima.sabor.data.listener.ErrorBundle;
 import dima.sabor.data.listener.FirebaseFavsListener;
-import dima.sabor.data.listener.FirebaseRecipeListener;
 import dima.sabor.model.Recipe;
 import dima.sabor.model.User;
 
@@ -59,7 +54,8 @@ public class FirebaseDataSource implements FirebaseInterface {
     // for facebook
     private CallbackManager callbackManager;
 
-    private ChildEventListener listener;
+    //private ChildEventListener listener;
+    private ValueEventListener listener;
     private ValueEventListener listener1;
     private ValueEventListener listener2;
 
@@ -325,8 +321,8 @@ public class FirebaseDataSource implements FirebaseInterface {
     }
 
     @Override
-    public void getRecipes(final FirebaseRecipeListener dataCallback) {
-        this.listener = new ChildEventListener() {
+    public void getRecipes(final FirebaseFavsListener dataCallback) {
+      /*  this.listener = new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Log.d(TAGLOG, "onChildAdded: {" + dataSnapshot.getKey() + ": " + dataSnapshot.getValue() + "}");
@@ -375,7 +371,26 @@ public class FirebaseDataSource implements FirebaseInterface {
             }
         };
 
-        databaseRef.child("recipes").addChildEventListener(listener);
+        databaseRef.child("recipes").addChildEventListener(listener);*/
+
+        this.listener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                List<Recipe> favs = new ArrayList<>();
+                for (DataSnapshot postSnapshot: snapshot.getChildren()) {
+                    Recipe recipe = postSnapshot.getValue(Recipe.class);
+                    favs.add(recipe);
+                }
+                dataCallback.onNewFav(favs);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                //Log.e("recipes", "onCancelled", databaseError.toException());
+            }
+        };
+
+        databaseRef.child("recipes").addValueEventListener(listener);
     }
 
     @Override

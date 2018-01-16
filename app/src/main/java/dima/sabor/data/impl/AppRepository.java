@@ -1,7 +1,6 @@
 package dima.sabor.data.impl;
 
 import java.util.List;
-import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -10,7 +9,6 @@ import dima.sabor.data.InternalStorageInterface;
 import dima.sabor.data.RepositoryInterface;
 import dima.sabor.data.listener.ErrorBundle;
 import dima.sabor.data.listener.FirebaseFavsListener;
-import dima.sabor.data.listener.FirebaseRecipeListener;
 import dima.sabor.model.Recipe;
 
 public class AppRepository implements RepositoryInterface {
@@ -24,8 +22,8 @@ public class AppRepository implements RepositoryInterface {
     }
 
     @Override
-    public void getRecipes(final GetRecipeCallback dataCallback) {
-        firebaseDataSource.getRecipes(new FirebaseRecipeListener() {
+    public void getRecipes(final GetFavouritesCallback dataCallback) {
+        firebaseDataSource.getRecipes(/*new FirebaseRecipeListener() {
             @Override
             public void onNewRecipe(Map<String,Recipe> map) {
                 //TODO: pasar map entero
@@ -36,7 +34,18 @@ public class AppRepository implements RepositoryInterface {
             public void onError(ErrorBundle bundle) {
                 dataCallback.onError(bundle);
             }
-        });
+        }*/
+                new FirebaseFavsListener() {
+                    @Override
+                    public void onNewFav(List<Recipe> recipes) {
+                        dataCallback.onSuccess(recipes);
+                    }
+
+                    @Override
+                    public void onError(ErrorBundle bundle) {
+                        dataCallback.onError(bundle);
+                    }
+                });
     }
 
     @Override

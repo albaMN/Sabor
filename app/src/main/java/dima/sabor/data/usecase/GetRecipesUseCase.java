@@ -1,5 +1,7 @@
 package dima.sabor.data.usecase;
 
+import java.util.List;
+
 import javax.inject.Inject;
 
 import dima.sabor.base.executor.PostExecutionThread;
@@ -11,20 +13,20 @@ import dima.sabor.data.RepositoryInterface;
 import dima.sabor.data.listener.ErrorBundle;
 import dima.sabor.model.Recipe;
 
-public class GetRecipesUseCase extends BaseUseCase<Recipe> implements Interactor<String, Recipe> {
+public class GetRecipesUseCase extends BaseUseCase<List<Recipe>> implements Interactor<String, List<Recipe>> {
 
     private final RepositoryInterface repository;
     private final ThreadExecutor executor;
     private GetRecipesUseCase.GetRecipesListener callback;
 
-    RepositoryInterface.GetRecipeCallback dataCallback = new RepositoryInterface.GetRecipeCallback() {
+    RepositoryInterface.GetFavouritesCallback dataCallback = new RepositoryInterface.GetFavouritesCallback() {
         @Override
         public void onError(ErrorBundle errorBundle) {
             notifyOnError(errorBundle, callback);
         }
 
         @Override
-        public void onSuccess(Recipe returnParam) {
+        public void onSuccess(List<Recipe> returnParam) {
             notifyOnSuccess(returnParam, callback);
         }
     };
@@ -37,7 +39,7 @@ public class GetRecipesUseCase extends BaseUseCase<Recipe> implements Interactor
     }
 
     @Override
-    public <R extends DefaultCallback<Recipe>> void execute(String nothing, R defaultCallback) {
+    public <R extends DefaultCallback<List<Recipe>>> void execute(String nothing, R defaultCallback) {
         this.callback = ((GetRecipesUseCase.GetRecipesListener) defaultCallback);
         executor.execute(this);
     }
@@ -47,5 +49,5 @@ public class GetRecipesUseCase extends BaseUseCase<Recipe> implements Interactor
         repository.getRecipes(dataCallback);
     }
 
-    public interface GetRecipesListener extends DefaultCallback<Recipe> {}
+    public interface GetRecipesListener extends DefaultCallback<List<Recipe>> {}
 }

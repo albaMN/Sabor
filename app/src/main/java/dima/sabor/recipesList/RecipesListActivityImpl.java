@@ -80,6 +80,7 @@ public class RecipesListActivityImpl extends MenuActivityImpl implements Recipes
             }
         });
 
+
     }
 
     public void generateRecipes(List<Recipe> recipes) {
@@ -132,9 +133,13 @@ public class RecipesListActivityImpl extends MenuActivityImpl implements Recipes
         recyclerViewRecipes.setAdapter(adapter);
     }
 
-    public void addRecipe(Recipe recipe) {
-        listrecipes.add(recipe);
-        adapter.notifyDataSetChanged();
+    public void addRecipe(List<Recipe> recipe) {
+        listrecipes.clear();
+        listrecipes = recipe;
+        Log.i("ALLRECIPES","Recipes: "+recipe);
+        generateRecipes(listrecipes);
+        //listrecipes.add(recipe);
+        //adapter.notifyDataSetChanged();
 
     }
 

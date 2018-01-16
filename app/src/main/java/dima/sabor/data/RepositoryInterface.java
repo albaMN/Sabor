@@ -7,7 +7,7 @@ import dima.sabor.model.Recipe;
 
 public interface RepositoryInterface {
 
-    void getRecipes(GetRecipeCallback dataCallback);
+    void getRecipes(GetFavouritesCallback dataCallback);
     void getFavourites(GetFavouritesCallback dataCallback);
     void getMyRecipes(GetFavouritesCallback dataCallback);
 

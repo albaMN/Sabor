@@ -42,7 +42,7 @@ public class ShowRecipesPresenter {
             }
 
             @Override
-            public void onSuccess(Recipe returnParam) {
+            public void onSuccess(List<Recipe> returnParam) {
                 view.addRecipe(returnParam);
             }
         });

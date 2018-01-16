@@ -11,7 +11,6 @@ import com.google.firebase.database.DatabaseReference;
 
 import dima.sabor.base.BaseActivityImpl;
 import dima.sabor.data.listener.FirebaseFavsListener;
-import dima.sabor.data.listener.FirebaseRecipeListener;
 import dima.sabor.model.Recipe;
 import dima.sabor.model.User;
 
@@ -33,7 +32,7 @@ public interface FirebaseInterface {
     void signOut(String provider);
     String addRecipe(Recipe recipe);
     void getMyRecipes(String userID, FirebaseFavsListener dataCallback);
-    void getRecipes(FirebaseRecipeListener dataCallback);
+    void getRecipes(FirebaseFavsListener dataCallback);
     void isFav(String userID, FirebaseFavsListener dataCallback);
     void deleteFav(String userID, String recipeID);
     void addFav(String userID,Recipe recipe);
